@@ -1,0 +1,32 @@
+{
+    "name": "francerz/siitec2_api_lib",
+    "description": "PHP ITColima SIITEC 2 API Library",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/francerz/php-power-data"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/francerz/php-http"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/francerz/php-oauth2"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ITColima\\Siitec2\\Api\\Lib\\" : "src"
+        }
+    },
+    "require": {
+        "psr/http-message": "^1.0",
+        "francerz/power-data": "dev-master",
+        "francerz/http": "dev-master",
+        "francerz/oauth2": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    }
+}
