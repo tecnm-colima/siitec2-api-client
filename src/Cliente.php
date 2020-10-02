@@ -32,23 +32,24 @@ class Cliente
         return $this->oauth2->getAccessToken();
     }
 
-    public function getApiUrl() : UriInterface
+    public function getApiUri() : UriInterface
     {
-        $url = new Uri();
-        $url->withScheme(Constants::API_PROTOCOL);
-        $url->withHost(Constants::API_HOST);
-        $url->withPath(Constants::API_PATH);
-        return $url;
+        $uri = new Uri();
+        $uri = $uri
+            ->withScheme(Constants::API_PROTOCOL)
+            ->withHost(Constants::API_HOST)
+            ->withPath(Constants::API_PATH);
+        return $uri;
     }
 
     private function getAuthUrlBase() : UriInterface
     {
-        $url = new Uri();
-        $url = $url
+        $uri = new Uri();
+        $uri = $uri
             ->withScheme(Constants::AUTH_PROTOCOL)
             ->withHost(Constants::AUTH_HOST)
             ->withPath(Constants::AUTH_PATH);
-        return $url;
+        return $uri;
     }
     public function getAuthCodeUri(UriInterface $redirect_uri = null, string $state = null) : UriInterface
     {

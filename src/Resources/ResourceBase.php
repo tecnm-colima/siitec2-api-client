@@ -16,7 +16,7 @@ abstract class ResourceBase
     }
     protected function request($path, array $params = null, string $fragment = null) : RequestInterface
     {
-        $uri = $this->cliente->getApiUrl();
+        $uri = $this->cliente->getApiUri();
         $uri = UriHelper::appendPath($uri, $path);
         if (!empty($params)) {
             $uri = UriHelper::withQueryParams($uri, $params);
