@@ -1,5 +1,5 @@
 {
-    "name": "francerz/siitec2_api_lib",
+    "name": "itcolima/siitec2-api-lib",
     "description": "PHP ITColima SIITEC 2 API Library",
     "repositories": [
         {
@@ -17,14 +17,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "ITColima\\Siitec2\\Api\\Lib\\" : "src"
+            "ITColima\\Siitec2\\Api\\" : "src"
         }
     },
     "require": {
         "psr/http-message": "^1.0",
-        "francerz/power-data": "dev-master",
-        "francerz/http": "dev-master",
-        "francerz/oauth2": "dev-master"
+        "francerz/php-power-data": "dev-master",
+        "francerz/php-http": "dev-master",
+        "francerz/php-oauth2": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.2"
