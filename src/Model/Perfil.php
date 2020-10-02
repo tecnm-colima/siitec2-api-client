@@ -1,6 +1,6 @@
 <?php
 
-namespace Francerz\Api\Model;
+namespace ITColima\Siitec2\Api\Model;
 
 class Perfil
 {

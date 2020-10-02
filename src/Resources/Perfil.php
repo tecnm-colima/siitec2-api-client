@@ -1,7 +1,7 @@
 <?php
-namespace Siitec2\Api\Resources;
+namespace ITColima\Siitec2\Api\Resources;
 
-use Siitec2\Api\Cliente;
+use ITColima\Siitec2\Api\Cliente;
 use Francerz\Http\Client AS HttpClient;
 use Francerz\Http\Helpers\MessageHelper;
 

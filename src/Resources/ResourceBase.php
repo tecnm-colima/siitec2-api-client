@@ -1,11 +1,10 @@
 <?php
-namespace Siitec2\Api\Resources;
+namespace ITColima\Siitec2\Api\Resources;
 
-use Francerz\Http\Helpers\MessageHelper;
 use Francerz\Http\Helpers\UriHelper;
 use Francerz\Http\Request;
 use Psr\Http\Message\RequestInterface;
-use Siitec2\Api\Cliente;
+use ITColima\Siitec2\Api\Cliente;
 
 abstract class ResourceBase
 {

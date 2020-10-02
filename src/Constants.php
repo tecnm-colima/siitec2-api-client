@@ -1,5 +1,5 @@
 <?php
-namespace Siitec2\Api;
+namespace ITColima\Siitec2\Api;
 
 
 class Constants
