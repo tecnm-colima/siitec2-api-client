@@ -18,7 +18,7 @@ class Cliente
         $this->oauth2 = new AuthClient();
         $this->oauth2 = $this->oauth2
             ->withAuthorizationEndpoint(UriHelper::appendPath($this->getAuthUrlBase(), '/oauth2/request'))
-            ->withTokenEndpoint(UriHelper::appendPath($this->getAuthUrlBase(), '/oauth2/token'));
+            ->withTokenEndpoint(UriHelper::appendPath($this->getAuthUrlBase(), '/oauth2/access_token'));
     }
     public function loadConfigFile($config)
     {
