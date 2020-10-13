@@ -25,8 +25,10 @@ class Cliente
         $config = json_decode(file_get_contents($config));
         $this->oauth2 = $this->oauth2
             ->withClientId($config->client_id)
-            ->withClientSecret($config->client_secret)
-            ->withCallbackEndpoint(new Uri($config->callback_endpoint));
+            ->withClientSecret($config->client_secret);
+        if (isset($config->callback_endpoint)) {
+            $this->oauth2 = $this->oauth2->withCallbackEndpoint(new Uri($config->callback_endpoint));
+        }
     }
     public function getAccessToken()
     {
@@ -70,6 +72,11 @@ class Cliente
     {
         $response = $this->getLoginRequest($scopes, $state);
         Server::output($response);
+    }
+
+    public function setLoginHandlerUri(UriInterface $uri)
+    {
+        $this->oauth2 = $this->oauth2->withCallbackEndpoint($uri);
     }
 
     public function handleLogin(RequestInterface $request)
