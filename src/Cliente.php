@@ -2,9 +2,9 @@
 namespace ITColima\Siitec2\Api;
 
 use Francerz\Http\Helpers\UriHelper;
+use Francerz\Http\Response;
+use Francerz\Http\Server;
 use Francerz\Http\Uri;
-use Francerz\OAuth2\AccessToken;
-use Francerz\OAuth2\Flow\AuthorizationCodeRequest;
 use Francerz\OAuth2\Roles\AuthClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -17,15 +17,16 @@ class Cliente
     {
         $this->oauth2 = new AuthClient();
         $this->oauth2 = $this->oauth2
-            ->withAuthorizationEndpoint(UriHelper::appendPath($this->getAuthUrlBase(), '/oauth2/request'))
-            ->withTokenEndpoint(UriHelper::appendPath($this->getAuthUrlBase(), '/oauth2/access_token'));
+            ->withAuthorizationEndpoint(UriHelper::appendPath($this->getAuthUriBase(), '/oauth2/request'))
+            ->withTokenEndpoint(UriHelper::appendPath($this->getAuthUriBase(), '/oauth2/access_token'));
     }
     public function loadConfigFile($config)
     {
         $config = json_decode(file_get_contents($config));
         $this->oauth2 = $this->oauth2
             ->withClientId($config->client_id)
-            ->withClientSecret($config->client_secret);
+            ->withClientSecret($config->client_secret)
+            ->withCallbackEndpoint(new Uri($config->callback_endpoint));
     }
     public function getAccessToken()
     {
@@ -42,7 +43,7 @@ class Cliente
         return $uri;
     }
 
-    private function getAuthUrlBase() : UriInterface
+    private function getAuthUriBase() : UriInterface
     {
         $uri = new Uri();
         $uri = $uri
@@ -51,28 +52,27 @@ class Cliente
             ->withPath(Constants::AUTH_PATH);
         return $uri;
     }
-    public function getAuthCodeUri(UriInterface $redirect_uri = null, string $state = null) : UriInterface
+
+    public function getAuthCodeUri(array $scopes = [], string $state = null) : UriInterface
     {
-        $request = new AuthorizationCodeRequest($this->oauth2);
-        if (isset($redirect_uri)) {
-            $request = $request->withRedirectUri($redirect_uri);
-        }
-        if (isset($state)) {
-            $request = $request->withState($state);
-        }
-        return $request->getRequestUri();
+        return $this->oauth2->getAuthorizationCodeRequestUri($scopes, $state);
     }
 
-    public function redeemAuthCode(string $code, UriInterface $redirect_uri = null) : ?AccessToken
+    public function getLoginRequest(array $scopes = [], string $state = null) : Response
     {
-        return $this->oauth2->redeemAuthCode(
-            $this->oauth2->getAuthorizationEndpoint(),
-            $code,
-            $redirect_uri
-        );
+        $authUri = $this->getAuthCodeUri($scopes, $state);
+        $response = new Response();
+        $response = $response->withHeader('Location', $authUri);
+        return $response;
     }
 
-    public function handleAuthCodeRequest(RequestInterface $request)
+    public function performLogin(array $scopes = [], string $state = null)
+    {
+        $response = $this->getLoginRequest($scopes, $state);
+        Server::output($response);
+    }
+
+    public function handleLogin(RequestInterface $request)
     {
         $this->oauth2->handleAuthCodeRequest($request);
     }
