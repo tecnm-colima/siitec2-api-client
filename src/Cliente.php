@@ -55,12 +55,12 @@ class Cliente
         return $uri;
     }
 
-    public function getAuthCodeUri(array $scopes = [], string $state = null) : UriInterface
+    public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
     {
         return $this->oauth2->getAuthorizationCodeRequestUri($scopes, $state);
     }
 
-    public function getLoginRequest(array $scopes = [], string $state = null) : Response
+    public function getLoginRequest(array $scopes = [], string $state = '') : Response
     {
         $authUri = $this->getAuthCodeUri($scopes, $state);
         $response = new Response();
@@ -68,7 +68,7 @@ class Cliente
         return $response;
     }
 
-    public function performLogin(array $scopes = [], string $state = null)
+    public function performLogin(array $scopes = [], string $state = '')
     {
         $response = $this->getLoginRequest($scopes, $state);
         Server::output($response);
