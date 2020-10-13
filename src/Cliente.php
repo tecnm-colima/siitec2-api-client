@@ -4,6 +4,7 @@ namespace ITColima\Siitec2\Api;
 use Francerz\Http\Helpers\UriHelper;
 use Francerz\Http\Response;
 use Francerz\Http\Server;
+use Francerz\Http\StatusCodes;
 use Francerz\Http\Uri;
 use Francerz\OAuth2\Roles\AuthClient;
 use Psr\Http\Message\RequestInterface;
@@ -64,7 +65,9 @@ class Cliente
     {
         $authUri = $this->getAuthCodeUri($scopes, $state);
         $response = new Response();
-        $response = $response->withHeader('Location', $authUri);
+        $response = $response
+            ->withStatus(StatusCodes::TEMPORARY_REDIRECT)
+            ->withHeader('Location', $authUri);
         return $response;
     }
 
