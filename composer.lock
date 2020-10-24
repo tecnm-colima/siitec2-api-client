@@ -50,16 +50,16 @@
         },
         {
             "name": "francerz/php-oauth2-client",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/francerz/php-oauth2-client.git",
-                "reference": "3f6e411be7e2c200174f24e5919eaefce23efb77"
+                "reference": "0af7276109034b43248d6792ac31596b41d23bc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/francerz/php-oauth2-client/zipball/3f6e411be7e2c200174f24e5919eaefce23efb77",
-                "reference": "3f6e411be7e2c200174f24e5919eaefce23efb77",
+                "url": "https://api.github.com/repos/francerz/php-oauth2-client/zipball/0af7276109034b43248d6792ac31596b41d23bc9",
+                "reference": "0af7276109034b43248d6792ac31596b41d23bc9",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "oauth2",
                 "psr-7"
             ],
-            "time": "2020-10-23T17:05:24+00:00"
+            "time": "2020-10-24T17:34:15+00:00"
         },
         {
             "name": "francerz/php-oauth2-core",
