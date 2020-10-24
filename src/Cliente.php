@@ -6,6 +6,7 @@ use Francerz\Http\Tools\HttpFactoryManager;
 use Francerz\Http\Tools\ServerInterface;
 use Francerz\OAuth2\AccessToken;
 use Francerz\OAuth2\Client\AuthClient;
+use InvalidArgumentException;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,13 +18,16 @@ class Cliente
     private $httpFactory;
     private $httpClient;
 
+    private $apiEndpoint;
+
     public function __construct(HttpFactoryManager $httpFactory, HttpClient $httpClient)
     {
         $this->httpFactory = $httpFactory;
         $this->httpClient = $httpClient;
         $this->oauth2 = new AuthClient($httpFactory, $httpClient);
-        $this->oauth2->setAuthorizationEndpoint(Constants::AUTHORIZE_ENDPOINT);
-        $this->oauth2->setTokenEndpoint(Constants::TOKEN_ENDPOINT);
+        $this->setAuthorizeEndpoint(Constants::AUTHORIZE_ENDPOINT);
+        $this->setTokenEndpoint(Constants::TOKEN_ENDPOINT);
+        $this->setApiEndpoint(Constants::API_ENDPOINT);
     }
     public function setClientId(string $client_id)
     {
@@ -43,14 +47,45 @@ class Cliente
         }
     }
 
-    public function getAccessToken()
+    public function setAuthorizeEndpoint($uri)
     {
-        return $this->oauth2->getAccessToken();
+        if (is_string($uri)) {
+            $uri = $this->httpFactory->getUriFactory()->createUri($uri);
+        }
+        if (!$uri instanceof UriInterface) {
+            throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
+        }
+        $this->oauth2->setAuthorizationEndpoint($uri);
     }
+    public function setTokenEndpoint($uri)
+    {
+        if (is_string($uri)) {
+            $uri = $this->httpFactory->getUriFactory()->createUri($uri);
+        }
+        if (!$uri instanceof UriInterface) {
+            throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
+        }
+        $this->oauth2->setTokenEndpoint($uri);
+    }
+    public function setApiEndpoint($uri)
+    {
+        if (is_string($uri)) {
+            $uri = $this->httpFactory->getUriFactory()->createUri($uri);
+        }
+        if (!$uri instanceof UriInterface) {
+            throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
+        }
+        $this->apiEndpoint = $uri;
+    }
+
 
     public function setAccessToken(AccessToken $accessToken)
     {
         $this->oauth2->setAccessToken($accessToken);
+    }
+    public function getAccessToken()
+    {
+        return $this->oauth2->getAccessToken();
     }
 
     public function getHttpFactory() : HttpFactoryManager
@@ -70,7 +105,7 @@ class Cliente
 
     public function getApiUri() : UriInterface
     {
-        return $this->httpFactory->getUriFactory()->createUri(Constants::API_ENDPOINT);
+        return $this->apiEndpoint;
     }
 
     public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
