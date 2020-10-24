@@ -131,7 +131,7 @@ class Cliente
 
     public function setLoginHandlerUri(UriInterface $uri)
     {
-        $this->oauth2 = $this->oauth2->setCallbackEndpoint($uri);
+        $this->oauth2->setCallbackEndpoint($uri);
     }
 
     public function handleLogin(RequestInterface $request)
