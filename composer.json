@@ -7,10 +7,8 @@
         }
     },
     "require": {
-        "psr/http-message": "^1.0",
-        "francerz/php-power-data": "dev-master",
-        "francerz/php-http": "dev-master",
-        "francerz/php-oauth2": "dev-master"
+        "francerz/php-oauth2-client": "^0.1.1",
+        "psr/http-client": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.2"

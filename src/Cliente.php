@@ -1,59 +1,76 @@
 <?php
 namespace ITColima\Siitec2\Api;
 
-use Francerz\Http\Helpers\UriHelper;
-use Francerz\Http\Response;
-use Francerz\Http\Server;
-use Francerz\Http\StatusCodes;
-use Francerz\Http\Uri;
-use Francerz\OAuth2\Roles\AuthClient;
+use Francerz\Http\Constants\StatusCodes;
+use Francerz\Http\Tools\HttpFactoryManager;
+use Francerz\Http\Tools\ServerInterface;
+use Francerz\OAuth2\AccessToken;
+use Francerz\OAuth2\Client\AuthClient;
+use Psr\Http\Client\ClientInterface as HttpClient;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 class Cliente
 {
     private $oauth2;
+    private $httpFactory;
+    private $httpClient;
 
-    public function __construct()
+    public function __construct(HttpFactoryManager $httpFactory, HttpClient $httpClient)
     {
-        $this->oauth2 = new AuthClient();
-        $this->oauth2 = $this->oauth2
-            ->withAuthorizationEndpoint(UriHelper::appendPath($this->getAuthUriBase(), '/oauth2/request'))
-            ->withTokenEndpoint(UriHelper::appendPath($this->getAuthUriBase(), '/oauth2/access_token'));
+        $this->httpFactory = $httpFactory;
+        $this->httpClient = $httpClient;
+        $this->oauth2 = new AuthClient($httpFactory, $httpClient);
+        $this->oauth2->setAuthorizationEndpoint(Constants::AUTHORIZE_ENDPOINT);
+        $this->oauth2->setTokenEndpoint(Constants::TOKEN_ENDPOINT);
+    }
+    public function setClientId(string $client_id)
+    {
+        $this->oauth2->setClientId($client_id);
+    }
+    public function setClientSecret(string $client_secret)
+    {
+        $this->oauth2->setClientSecret($client_secret);
     }
     public function loadConfigFile($config)
     {
         $config = json_decode(file_get_contents($config));
-        $this->oauth2 = $this->oauth2
-            ->withClientId($config->client_id)
-            ->withClientSecret($config->client_secret);
+        $this->oauth2->setClientId($config->client_id);
+        $this->oauth2->setClientSecret($config->client_secret);
         if (isset($config->callback_endpoint)) {
-            $this->oauth2 = $this->oauth2->withCallbackEndpoint(new Uri($config->callback_endpoint));
+            $this->oauth2->setCallbackEndpoint($config->callback_endpoint);
         }
     }
+
     public function getAccessToken()
     {
         return $this->oauth2->getAccessToken();
     }
 
-    public function getApiUri() : UriInterface
+    public function setAccessToken(AccessToken $accessToken)
     {
-        $uri = new Uri();
-        $uri = $uri
-            ->withScheme(Constants::API_PROTOCOL)
-            ->withHost(Constants::API_HOST)
-            ->withPath(Constants::API_PATH);
-        return $uri;
+        $this->oauth2->setAccessToken($accessToken);
     }
 
-    private function getAuthUriBase() : UriInterface
+    public function getHttpFactory() : HttpFactoryManager
     {
-        $uri = new Uri();
-        $uri = $uri
-            ->withScheme(Constants::AUTH_PROTOCOL)
-            ->withHost(Constants::AUTH_HOST)
-            ->withPath(Constants::AUTH_PATH);
-        return $uri;
+        return $this->httpFactory;
+    }
+
+    public function getHttpClient() : HttpClient
+    {
+        return $this->httpClient;
+    }
+
+    public function getUserAuth() : AuthClient
+    {
+        return $this->oauth2;
+    }
+
+    public function getApiUri() : UriInterface
+    {
+        return $this->httpFactory->getUriFactory()->createUri(Constants::API_ENDPOINT);
     }
 
     public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
@@ -61,29 +78,29 @@ class Cliente
         return $this->oauth2->getAuthorizationCodeRequestUri($scopes, $state);
     }
 
-    public function getLoginRequest(array $scopes = [], string $state = '') : Response
+    public function getLoginRequest(array $scopes = [], string $state = '') : ResponseInterface
     {
+        $responseFactory = $this->httpFactory->getResponseFactory();
         $authUri = $this->getAuthCodeUri($scopes, $state);
-        $response = new Response();
-        $response = $response
-            ->withStatus(StatusCodes::TEMPORARY_REDIRECT)
+        $response = $responseFactory
+            ->createResponse(StatusCodes::REDIRECT_TEMPORARY_REDIRECT)
             ->withHeader('Location', $authUri);
         return $response;
     }
 
-    public function performLogin(array $scopes = [], string $state = '')
+    public function performLogin(ServerInterface $server, array $scopes = [], string $state = '')
     {
         $response = $this->getLoginRequest($scopes, $state);
-        Server::output($response);
+        $server->emitResponse($response);
     }
 
     public function setLoginHandlerUri(UriInterface $uri)
     {
-        $this->oauth2 = $this->oauth2->withCallbackEndpoint($uri);
+        $this->oauth2 = $this->oauth2->setCallbackEndpoint($uri);
     }
 
     public function handleLogin(RequestInterface $request)
     {
-        $this->oauth2->handleAuthCodeRequest($request);
+        $this->oauth2->handleCallbackRequest($request);
     }
 }

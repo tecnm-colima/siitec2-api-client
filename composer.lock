@@ -4,59 +4,112 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be064cc2f48358e3b8d3f093f49cc71d",
+    "content-hash": "1e9dde2fcb870bc342ce84a0fa661c84",
     "packages": [
         {
-            "name": "francerz/php-http",
-            "version": "dev-master",
+            "name": "francerz/php-http-tools",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/francerz/php-http.git",
-                "reference": "c28dfe76ca56d4da5df31dbd7798f1782d4dbb7a"
+                "url": "https://github.com/francerz/php-http-tools.git",
+                "reference": "08894ff8c5ba60df9c2e8640d8cd3bfcfb86a206"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/francerz/php-http/zipball/c28dfe76ca56d4da5df31dbd7798f1782d4dbb7a",
-                "reference": "c28dfe76ca56d4da5df31dbd7798f1782d4dbb7a",
+                "url": "https://api.github.com/repos/francerz/php-http-tools/zipball/08894ff8c5ba60df9c2e8640d8cd3bfcfb86a206",
+                "reference": "08894ff8c5ba60df9c2e8640d8cd3bfcfb86a206",
                 "shasum": ""
             },
             "require": {
-                "francerz/php-power-data": "dev-master",
+                "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
+                "phpunit/phpunit": "^9.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Francerz\\Http\\Tools\\": "src/tools",
+                    "Francerz\\Http\\Headers\\": "src/headers",
+                    "Francerz\\Http\\Constants\\": "src/constants"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Francerz",
+                    "email": "francerzam@hotmail.com"
+                }
+            ],
+            "description": "PHP HTTP Tool kit compatible with PSR-7, PSR-17 and PSR-18",
+            "time": "2020-10-24T14:45:04+00:00"
+        },
+        {
+            "name": "francerz/php-oauth2-client",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/francerz/php-oauth2-client.git",
+                "reference": "3f6e411be7e2c200174f24e5919eaefce23efb77"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/francerz/php-oauth2-client/zipball/3f6e411be7e2c200174f24e5919eaefce23efb77",
+                "reference": "3f6e411be7e2c200174f24e5919eaefce23efb77",
+                "shasum": ""
+            },
+            "require": {
+                "francerz/php-http-tools": "^0.2",
+                "francerz/php-oauth2-core": "^0.1.0",
+                "francerz/php-power-data": "^0.1.0",
+                "psr/http-client": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "francerz/php-http": "^0.2",
                 "phpunit/phpunit": "^9.2"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Francerz\\Http\\": "src"
+                    "Francerz\\OAuth2\\Client\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "Basic HTTP client",
-            "time": "2020-10-11T23:25:29+00:00"
+            "license": [
+                "MIT"
+            ],
+            "description": "Client side OAuth 2.0 Authorization Framework library",
+            "keywords": [
+                "oauth2",
+                "psr-7"
+            ],
+            "time": "2020-10-23T17:05:24+00:00"
         },
         {
-            "name": "francerz/php-oauth2",
-            "version": "dev-master",
+            "name": "francerz/php-oauth2-core",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/francerz/php-oauth2.git",
-                "reference": "d731c2a8693ece955b87f1fd76be65c3a6caa3a6"
+                "url": "https://github.com/francerz/php-oauth2-core.git",
+                "reference": "3e66069c25f8096b4f37218ef1b4f480a2ec64e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/francerz/php-oauth2/zipball/d731c2a8693ece955b87f1fd76be65c3a6caa3a6",
-                "reference": "d731c2a8693ece955b87f1fd76be65c3a6caa3a6",
+                "url": "https://api.github.com/repos/francerz/php-oauth2-core/zipball/3e66069c25f8096b4f37218ef1b4f480a2ec64e9",
+                "reference": "3e66069c25f8096b4f37218ef1b4f480a2ec64e9",
                 "shasum": ""
             },
             "require": {
-                "francerz/php-http": "dev-master",
-                "francerz/php-power-data": "dev-master",
+                "francerz/php-http-tools": "^0.2",
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
+                "francerz/php-http": "^0.2",
                 "phpunit/phpunit": "^9.2"
             },
             "type": "library",
@@ -66,12 +119,19 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "PHP OAuth2 support library",
-            "time": "2020-10-13T16:21:55+00:00"
+            "license": [
+                "MIT"
+            ],
+            "description": "Core classes for francer/php-oauth2 packages",
+            "keywords": [
+                "oauth2",
+                "psr-7"
+            ],
+            "time": "2020-10-23T14:08:03+00:00"
         },
         {
             "name": "francerz/php-power-data",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/francerz/php-power-data.git",
@@ -100,6 +160,107 @@
             ],
             "description": "PHP data structures for complex data handling",
             "time": "2020-10-05T22:54:16+00:00"
+        },
+        {
+            "name": "psr/http-client",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-client.git",
+                "reference": "2dfb5f6c5eff0e91e20e913f8c5452ed95b86621"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-client/zipball/2dfb5f6c5eff0e91e20e913f8c5452ed95b86621",
+                "reference": "2dfb5f6c5eff0e91e20e913f8c5452ed95b86621",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^8.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP clients",
+            "homepage": "https://github.com/php-fig/http-client",
+            "keywords": [
+                "http",
+                "http-client",
+                "psr",
+                "psr-18"
+            ],
+            "time": "2020-06-29T06:28:15+00:00"
+        },
+        {
+            "name": "psr/http-factory",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-factory.git",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2019-04-30T12:38:16+00:00"
         },
         {
             "name": "psr/http-message",
@@ -941,16 +1102,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.4.1",
+            "version": "9.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1f09a12726593737e8a228ebb1c8647305d07c41"
+                "reference": "3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1f09a12726593737e8a228ebb1c8647305d07c41",
-                "reference": "1f09a12726593737e8a228ebb1c8647305d07c41",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa",
+                "reference": "3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa",
                 "shasum": ""
             },
             "require": {
@@ -1036,7 +1197,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-11T07:41:19+00:00"
+            "time": "2020-10-19T09:23:29+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -1940,16 +2101,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.18.1",
+            "version": "v1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "1c302646f6efc070cd46856e600e5e0684d6b454"
+                "reference": "aed596913b70fae57be53d86faa2e9ef85a2297b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/1c302646f6efc070cd46856e600e5e0684d6b454",
-                "reference": "1c302646f6efc070cd46856e600e5e0684d6b454",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/aed596913b70fae57be53d86faa2e9ef85a2297b",
+                "reference": "aed596913b70fae57be53d86faa2e9ef85a2297b",
                 "shasum": ""
             },
             "require": {
@@ -1961,7 +2122,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.18-dev"
+                    "dev-main": "1.19-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -2012,7 +2173,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-14T12:35:20+00:00"
+            "time": "2020-10-23T09:01:57+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -2112,11 +2273,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "francerz/php-power-data": 20,
-        "francerz/php-http": 20,
-        "francerz/php-oauth2": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
