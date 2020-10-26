@@ -12,7 +12,7 @@ class PerfilResource extends AbstractResource
     }
     public function own()
     {
-        $response = $this->get('/perfil/own');
+        $response = $this->get('/usuarios/perfil/own');
         return MessageHelper::getContent($response);
     }
 }
