@@ -1,9 +1,9 @@
 <?php
 namespace ITColima\Siitec2\Api;
 
-use Francerz\Http\Constants\StatusCodes;
-use Francerz\Http\Tools\HttpFactoryManager;
-use Francerz\Http\Tools\ServerInterface;
+use Francerz\Http\Utils\Constants\StatusCodes;
+use Francerz\Http\Utils\HttpFactoryManager;
+use Francerz\Http\Utils\ServerInterface;
 use Francerz\OAuth2\AccessToken;
 use Francerz\OAuth2\Client\AuthClient;
 use InvalidArgumentException;

@@ -2,10 +2,10 @@
 
 namespace ITColima\Siitec2\Api;
 
-use Francerz\Http\Constants\MediaTypes;
-use Francerz\Http\Constants\Methods;
-use Francerz\Http\Tools\MessageHelper;
-use Francerz\Http\Tools\UriHelper;
+use Francerz\Http\Utils\Constants\MediaTypes;
+use Francerz\Http\Utils\Constants\Methods;
+use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\UriHelper;
 use Psr\Http\Message\RequestInterface;
 
 abstract class AbstractResource

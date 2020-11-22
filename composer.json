@@ -7,7 +7,7 @@
         }
     },
     "require": {
-        "francerz/php-oauth2-client": "^0.1.1",
+        "francerz/oauth2-client": "^0.2",
         "psr/http-client": "^1.0"
     },
     "require-dev": {

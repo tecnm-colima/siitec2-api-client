@@ -1,7 +1,7 @@
 <?php
 namespace ITColima\Siitec2\Api\Resources\Usuario;
 
-use Francerz\Http\Tools\MessageHelper;
+use Francerz\Http\Utils\MessageHelper;
 use ITColima\Siitec2\Api\Cliente;
 use ITColima\Siitec2\Api\AbstractResource;
 
