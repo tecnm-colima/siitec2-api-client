@@ -6,8 +6,15 @@
             "ITColima\\Siitec2\\Api\\" : "src"
         }
     },
+    "repositories" : [
+        {
+            "type": "vcs",
+            "url": "https://github.com/francerz/itcolima_siitec2_api_common"
+        }
+    ],
     "require": {
         "francerz/oauth2-client": "^0.2",
+        "itcolima/siitec2-api-common": "dev-master",
         "psr/http-client": "^1.0"
     },
     "require-dev": {
