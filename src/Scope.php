@@ -11,7 +11,7 @@ interface Scopes
     const GET_USUARIO_PERFIL_BY_ID = 'usuarios.perfil.by-id:r';
 
     const GET_DOCENCIA_GRUPOS_ALL = 'docencia.grupos.all:r';
-    const GET_DOCENCIA_GRUPOS_USUARIO = 'docencia.grupos.own:r';
+    const GET_DOCENCIA_GRUPOS_OWN = 'docencia.grupos.own:r';
     const GET_DOCENCIA_GRUPOS_BY_ID = 'docencia.grupos.by-id:r';
 
     const GET_ESCOLARES_PERIODOS_ALL = 'escolares.periodos.all:r';
