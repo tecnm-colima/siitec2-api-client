@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd3342d0a86371c1a66f240d3d3e93fd",
+    "content-hash": "b0802c88d448a94533a2de90de574e8a",
     "packages": [
         {
             "name": "francerz/http-utils",
@@ -167,33 +167,6 @@
             ],
             "description": "PHP data structures for complex data handling",
             "time": "2020-11-12T17:07:04+00:00"
-        },
-        {
-            "name": "itcolima/siitec2-api-common",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:francerz/itcolima_siitec2_api_common.git",
-                "reference": "18b8bfba5366a30a0e65f50de7d70c9cf2c5f6f9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/francerz/itcolima_siitec2_api_common/zipball/18b8bfba5366a30a0e65f50de7d70c9cf2c5f6f9",
-                "reference": "18b8bfba5366a30a0e65f50de7d70c9cf2c5f6f9",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ITColima\\Siitec2\\Api\\Common\\": "src"
-                }
-            },
-            "description": "Contenido comun de la API de SIITEC 2",
-            "support": {
-                "source": "https://github.com/francerz/itcolima_siitec2_api_common/tree/master",
-                "issues": "https://github.com/francerz/itcolima_siitec2_api_common/issues"
-            },
-            "time": "2020-11-27T19:57:10+00:00"
         },
         {
             "name": "psr/http-client",
@@ -2302,9 +2275,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "itcolima/siitec2-api-common": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
