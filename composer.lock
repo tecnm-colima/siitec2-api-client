@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "francerz/http-utils",
-            "version": "v0.2.11",
+            "version": "v0.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/francerz/php-http-utils.git",
-                "reference": "51ab6ccbdd31abd5bbdb7772d8c3dbb1cad93390"
+                "reference": "2e067489437e2c1d19874a99267832a4791c4f50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/francerz/php-http-utils/zipball/51ab6ccbdd31abd5bbdb7772d8c3dbb1cad93390",
-                "reference": "51ab6ccbdd31abd5bbdb7772d8c3dbb1cad93390",
+                "url": "https://api.github.com/repos/francerz/php-http-utils/zipball/2e067489437e2c1d19874a99267832a4791c4f50",
+                "reference": "2e067489437e2c1d19874a99267832a4791c4f50",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,8 @@
                 "psr-4": {
                     "Francerz\\Http\\Utils\\": "src/utils",
                     "Francerz\\Http\\Utils\\Headers\\": "src/headers",
-                    "Francerz\\Http\\Utils\\Constants\\": "src/constants"
+                    "Francerz\\Http\\Utils\\Constants\\": "src/constants",
+                    "Francerz\\Http\\Utils\\Exceptions\\": "src/exceptions"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -53,7 +54,7 @@
                 "psr-17",
                 "psr-7"
             ],
-            "time": "2020-11-21T02:41:49+00:00"
+            "time": "2020-11-27T18:28:35+00:00"
         },
         {
             "name": "francerz/oauth2-client",
@@ -98,16 +99,16 @@
         },
         {
             "name": "francerz/oauth2-core",
-            "version": "v0.2.1",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/francerz/php-oauth2-core.git",
-                "reference": "c1a82dba2cc4917a73351d0ecc504b1922357004"
+                "reference": "1652941066421aa5d746e3bd321a060f7a48ca47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/francerz/php-oauth2-core/zipball/c1a82dba2cc4917a73351d0ecc504b1922357004",
-                "reference": "c1a82dba2cc4917a73351d0ecc504b1922357004",
+                "url": "https://api.github.com/repos/francerz/php-oauth2-core/zipball/1652941066421aa5d746e3bd321a060f7a48ca47",
+                "reference": "1652941066421aa5d746e3bd321a060f7a48ca47",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +134,7 @@
                 "oauth2",
                 "psr-7"
             ],
-            "time": "2020-10-26T19:52:06+00:00"
+            "time": "2020-11-22T17:30:12+00:00"
         },
         {
             "name": "francerz/php-power-data",
@@ -805,16 +806,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.3",
+            "version": "9.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6b20e2055f7c29b56cb3870b3de7cc463d7add41"
+                "reference": "0a7f0acf9269c190fd982b5c04423feae986b6e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6b20e2055f7c29b56cb3870b3de7cc463d7add41",
-                "reference": "6b20e2055f7c29b56cb3870b3de7cc463d7add41",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0a7f0acf9269c190fd982b5c04423feae986b6e0",
+                "reference": "0a7f0acf9269c190fd982b5c04423feae986b6e0",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +875,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-30T10:46:41+00:00"
+            "time": "2020-11-27T06:15:15+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
