@@ -10,7 +10,7 @@ class PerfilResource extends AbstractResource
     public function __construct(Cliente $cliente) {
         parent::__construct($cliente);
     }
-    public function own()
+    public function getOwn()
     {
         $response = $this->get('/usuarios/perfil/own');
         return MessageHelper::getContent($response);
