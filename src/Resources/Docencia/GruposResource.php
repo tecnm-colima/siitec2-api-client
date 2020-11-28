@@ -9,11 +9,13 @@ class GruposResource extends AbstractResource
 {
     public function getAll($params)
     {
+        $this->requiresAccessToken(false);
         $response = $this->get('/docencia/grupos');
         return MessageHelper::getContent($response);
     }
     public function getOwn()
     {
+        $this->requiresAccessToken(true);
         $response = $this->get('/docencia/grupos/own');
         return MessageHelper::getContent($response);
     }
@@ -22,6 +24,7 @@ class GruposResource extends AbstractResource
         if (is_array($grupo_id)) {
             $grupo_id = join('+', $grupo_id);
         }
+        $this->requiresAccessToken(false);
         $response = $this->get("/docencia/grupos/{$grupo_id}");
         return MessageHelper::getContent($response);
     }

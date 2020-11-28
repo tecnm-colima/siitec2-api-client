@@ -14,10 +14,17 @@ use Psr\Http\Message\ResponseInterface;
 abstract class AbstractResource
 {
     private $cliente;
+    private $requiresAccessToken;
 
     public function __construct(Cliente $cliente)
     {
         $this->cliente = $cliente;
+        $this->requiresAccessToken = false;
+    }
+
+    protected function requiresAccessToken(bool $requires = true)
+    {
+        $this->requiresAccessToken = $requires;
     }
 
     protected function buildRequest(
@@ -38,7 +45,9 @@ abstract class AbstractResource
 
         $requestFactory = $this->cliente->getHttpFactory()->getRequestFactory();
         $request = $requestFactory->createRequest($method, $uri);
-        $request = $this->cliente->getUserAuth()->bindAccessToken($request);
+        if ($this->requiresAccessToken) {
+            $request = $this->cliente->getUserAuth()->bindAccessToken($request);
+        }
 
         if (isset($content)) {
             $request = MessageHelper::withContent($request, $mediaType, $content);
