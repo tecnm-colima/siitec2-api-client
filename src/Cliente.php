@@ -210,7 +210,7 @@ class Cliente
         return $req;
     }
 
-    public function handleLogin(?ServerRequestInterface $request)
+    public function handleLogin(?ServerRequestInterface $request = null)
     {
         if (is_null($request)) {
             $request = $this->getCurrentServerRequest();
