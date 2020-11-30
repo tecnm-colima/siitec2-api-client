@@ -3,6 +3,7 @@ namespace ITColima\Siitec2\Api;
 
 use Francerz\Http\Utils\Constants\StatusCodes;
 use Francerz\Http\Utils\HttpFactoryManager;
+use Francerz\Http\Utils\MessageHelper;
 use Francerz\Http\Utils\ServerInterface;
 use Francerz\OAuth2\AccessToken;
 use Francerz\OAuth2\Client\AuthClient;
@@ -177,43 +178,11 @@ class Cliente
         $this->oauth2->setCallbackEndpoint($uri);
     }
 
-    private function getCurrentUri() : UriInterface
-    {
-        $uri = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-        $uri.= '://';
-        $uri.= $_SERVER['HTTP_HOST'];
-        $uri.= $_SERVER['REQUEST_URI'];
-        return $this->httpFactory->getUriFactory()->createUri($uri);   
-    }
-
-    private function getCurrentBodyStream()
-    {
-        return $this->httpFactory->getStreamFactory()
-            ->createStream(file_get_contents('php://input'));
-    }
-
-    private function getCurrentServerRequest()
-    {
-        $sp = $_SERVER['SERVER_PROTOCOL'];
-        $sp = substr($sp, strpos($sp, '/') + 1);
-
-        $srf = $this->httpFactory->getServerRequestFactory();
-        $req = $srf->createServerRequest($_SERVER['REQUEST_METHOD'], $this->getCurrentUri(), $_SERVER)
-            ->withProtocolVersion($sp)
-            ->withBody($this->getCurrentBodyStream());
-        
-        $headers = getallheaders();
-        foreach ($headers as $hname => $hcontent) {
-            $req->withHeader($hname, preg_split('/(,\\s*)/', $hcontent));
-        }
-
-        return $req;
-    }
-
     public function handleLogin(?ServerRequestInterface $request = null)
     {
         if (is_null($request)) {
-            $request = $this->getCurrentServerRequest();
+            MessageHelper::setHttpFactoryManager($this->httpFactory);
+            $request = MessageHelper::getCurrentRequest();
         }
         $this->oauth2->handleCallbackRequest($request);
     }
