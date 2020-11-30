@@ -1,6 +1,9 @@
 <?php
 namespace ITColima\Siitec2\Api;
 
+use Francerz\Http\Client as HttpClient;
+use Francerz\Http\HttpFactory;
+use Francerz\Http\Server;
 use Francerz\Http\Utils\Constants\StatusCodes;
 use Francerz\Http\Utils\HttpFactoryManager;
 use Francerz\Http\Utils\MessageHelper;
@@ -9,8 +12,7 @@ use Francerz\OAuth2\AccessToken;
 use Francerz\OAuth2\Client\AuthClient;
 use Francerz\PowerData\Functions;
 use InvalidArgumentException;
-use Psr\Http\Client\ClientInterface as HttpClient;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -26,14 +28,20 @@ class Cliente
     private $handlerAccessTokenChanged;
     private $handlerAccessTokenLoad;
 
-    public function __construct(HttpFactoryManager $httpFactory, HttpClient $httpClient)
-    {
-        $this->httpFactory = $httpFactory;
-        $this->httpClient = $httpClient;
+    public function __construct(
+        string $configFile,
+        ?HttpFactoryManager $httpFactory = null,
+        ?HttpClientInterface $httpClient = null
+    ) {
+        $this->httpFactory = isset($httpFactory) ? $httpFactory : new HttpFactoryManager(new HttpFactory());
+        $this->httpClient = isset($httpClient) ? $httpClient : new HttpClient();
+
         $this->oauth2 = new AuthClient($httpFactory, $httpClient);
         $this->setAuthorizeEndpoint(Constants::AUTHORIZE_ENDPOINT);
         $this->setTokenEndpoint(Constants::TOKEN_ENDPOINT);
         $this->setApiEndpoint(Constants::API_ENDPOINT);
+
+        $this->loadConfigFile($configFile);
 
         $this->handlerAccessTokenChanged = function(AccessToken $accessToken) {
             $_SESSION['access_token'] = $accessToken;
@@ -61,7 +69,7 @@ class Cliente
         $this->oauth2->setClientSecret($client_secret);
     }
 
-    public function loadConfigFile($config)
+    public function loadConfigFile(string $config)
     {
         $config = json_decode(file_get_contents($config));
         $this->oauth2->setClientId($config->client_id);
@@ -137,7 +145,7 @@ class Cliente
         return $this->httpFactory;
     }
 
-    public function getHttpClient() : HttpClient
+    public function getHttpClient() : HttpClientInterface
     {
         return $this->httpClient;
     }
@@ -167,8 +175,11 @@ class Cliente
         return $response;
     }
 
-    public function performLogin(ServerInterface $server, array $scopes = [], string $state = '')
+    public function performLogin( array $scopes = [], string $state = '', ?ServerInterface $server = null)
     {
+        if (is_null($server)) {
+            $server = new Server();
+        }
         $response = $this->getLoginRequest($scopes, $state);
         $server->emitResponse($response);
     }
