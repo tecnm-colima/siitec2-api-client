@@ -14,13 +14,13 @@ class GruposResource extends AbstractResource
         return MessageHelper::getContent($response);
     }
 
-    public function getById($grupo_id)
+    public function getById($grupo_id, array $params = [])
     {
         if (is_array($grupo_id)) {
             $grupo_id = join('+', $grupo_id);
         }
         $this->requiresAccessToken(false);
-        $response = $this->get("/escolares/grupos/{$grupo_id}");
+        $response = $this->get("/escolares/grupos/{$grupo_id}", $params);
         return MessageHelper::getContent($response);
     }
 
