@@ -20,21 +20,11 @@ de la clase Cliente.
 ```php
 use ITColima\Siitec2\Api\Cliente;
 
-$cliente = new Cliente();
+$cliente = new Cliente('/ruta/al/archivo.json');
 ```
 
-Para utilizar la conectividad se requiere utilizar un client_id y client_secret
-válidos, los cuales pueden asignarse mediante los *accesores* `setClientId` y
-`setClientSecret`.
-
-```php
-// Utilizando accesores
-$cliente->setClientId('<client_id>');
-$cliente->setClientSecret('<client_secret>');
-```
-
-También pueden asignarse estos archivos utilizando un archivo json con la
-configuración requerida en el siguiente formato.
+El archivo JSON debe contener al menos dos parámetros que son *client_id* y
+*client_secret* con el formato presentado a continuación:
 
 ```json
 {
@@ -43,13 +33,9 @@ configuración requerida en el siguiente formato.
 }
 ```
 
-Posteriormente utilizar el método `loadConfigFile` para establecer la ruta de
-consulta de la configuración.
-
-```php
-// Utilizando archivo de configuración
-$cliente->loadConfigFile('/ruta/al/archivo.json');
-```
+> **NOTA**  
+> Los valores de los parámetros *client_id* y *client_secret* son proporcionados
+> por el Departamento de Centro de Cómputo del Instituto Tecnológico de Colima.
 
 Inicio de sesión
 ---------------------------------------
