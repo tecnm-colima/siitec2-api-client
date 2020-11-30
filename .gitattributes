@@ -1,0 +1,9 @@
+/.gitattributes             export-ignore
+/.github                    export-ignore
+/.gitignore                 export-ignore
+/.phpunit.result.cache      export-ignore
+/.vscode                    export-ignore
+
+/tests                      export-ignore
+/composer.lock              export-ignore
+/phpunit.xml                export-ignore
