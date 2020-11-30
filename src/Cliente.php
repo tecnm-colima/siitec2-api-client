@@ -29,7 +29,7 @@ class Cliente
     private $handlerAccessTokenLoad;
 
     public function __construct(
-        string $configFile,
+        ?string $configFile = null,
         ?HttpFactoryManager $httpFactory = null,
         ?HttpClientInterface $httpClient = null
     ) {
@@ -41,7 +41,9 @@ class Cliente
         $this->setTokenEndpoint(Constants::TOKEN_ENDPOINT);
         $this->setApiEndpoint(Constants::API_ENDPOINT);
 
-        $this->loadConfigFile($configFile);
+        if (isset($configFile)) {
+            $this->loadConfigFile($configFile);
+        }
 
         $this->handlerAccessTokenChanged = function(AccessToken $accessToken) {
             $_SESSION['access_token'] = $accessToken;
