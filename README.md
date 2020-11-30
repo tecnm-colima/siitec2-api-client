@@ -72,12 +72,8 @@ acción.
 
 ```php
 // Archivo: login.php
-
-// Crear una URI hacia donde se dirigirá el resultado del inicio de sesión.
-$loginHandlerUri = new Uri('https://www.ejemplo.com/login_handler.php');
-
 // Establecer la URI como manejadora del inicio de sesión.
-$cliente->setLoginHandlerUri($loginHandlerUri);
+$cliente->setLoginHandlerUri('https://www.ejemplo.com/login_handler.php');
 
 // Inicia la acción de inicio de sesión.
 $cliente->performLogin();
@@ -91,27 +87,7 @@ del inicio de sesión.
 // Archivo: login_handler.php
 
 // Capturar la petición entrante y permitir a la librería gestionar el proceso.
-$cliente->handleLogin(new ServerRequest());
-
-// Guardar el Access Token obtenido que es la llave de identificación de la
-// sesión.
-$_SESSION['access_token'] = $cliente->getAccessToken();
-```
-
-Durante la ejecución del archivo será posible continuar solicitando recursos,
-puesto que la librería mantiene una copia del Access Token.
-
-Si se pretende utilizar el Access Token en otro archivo, será neceario
-restaurar la copia guardada en la variable de sesión utilizando el método
-`setAccessToken`.
-
-```php
-// Archivo: otro_archivo.php
-
-// Inicializar la librería cliente.
-
-// Hacer la restauración del Access Token previamente almacenado en $_SESSION
-$cliente->setAccessToken($_SESSION['access_token']);
+$cliente->handleLogin();
 ```
 
 > **NOTA**  
