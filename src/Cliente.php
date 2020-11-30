@@ -33,8 +33,8 @@ class Cliente
         ?HttpFactoryManager $httpFactory = null,
         ?HttpClientInterface $httpClient = null
     ) {
-        $this->httpFactory = isset($httpFactory) ? $httpFactory : new HttpFactoryManager(new HttpFactory());
-        $this->httpClient = isset($httpClient) ? $httpClient : new HttpClient();
+        $this->httpFactory = $httpFactory = isset($httpFactory) ? $httpFactory : new HttpFactoryManager(new HttpFactory());
+        $this->httpClient = $httpClient = isset($httpClient) ? $httpClient : new HttpClient();
 
         $this->oauth2 = new AuthClient($httpFactory, $httpClient);
         $this->setAuthorizeEndpoint(Constants::AUTHORIZE_ENDPOINT);
