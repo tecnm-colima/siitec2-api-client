@@ -27,6 +27,7 @@ class Cliente
 
     private $handlerAccessTokenChanged;
     private $handlerAccessTokenLoad;
+    private $handlerAccessTokenRevoke;
 
     public function __construct(
         ?string $configFile = null,
@@ -51,6 +52,11 @@ class Cliente
         $this->handlerAccessTokenLoad = function() {
             if (isset($_SESSION['access_token']) && $_SESSION['access_token'] instanceof AccessToken) {
                 $this->setAccessToken($_SESSION['access_token']);
+            }
+        };
+        $this->handlerAccessTokenRevoke = function() {
+            if (isset($_SESSION['access_token']) && $_SESSION['access_token'] instanceof AccessToken) {
+                unset($_SESSION['access_token']);
             }
         };
 
@@ -142,6 +148,11 @@ class Cliente
         $this->handlerAccessTokenChanged = $handler;
     }
 
+    public function setAccessTokenRevokeHandler(callable $handler)
+    {
+        $this->handlerAccessTokenRevoke = $handler;
+    }
+
     public function getHttpFactory() : HttpFactoryManager
     {
         return $this->httpFactory;
@@ -204,5 +215,10 @@ class Cliente
             $request = MessageHelper::getCurrentRequest();
         }
         $this->oauth2->handleCallbackRequest($request);
+    }
+
+    public function revoke()
+    {
+        call_user_func($this->handlerAccessTokenRevoke);
     }
 }
