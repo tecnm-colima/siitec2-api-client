@@ -186,8 +186,14 @@ class Cliente
         $server->emitResponse($response);
     }
 
-    public function setLoginHandlerUri(UriInterface $uri)
+    public function setLoginHandlerUri($uri)
     {
+        if (is_string($uri)) {
+            $uri = $this->httpFactory->getUriFactory()->createUri($uri);
+        }
+        if (!$uri instanceof UriInterface) {
+            throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
+        }
         $this->oauth2->setCallbackEndpoint($uri);
     }
 
