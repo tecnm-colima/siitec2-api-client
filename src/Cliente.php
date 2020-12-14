@@ -45,6 +45,13 @@ class Cliente
         if (isset($configFile)) {
             $this->loadConfigFile($configFile);
         }
+        
+        if (array_key_exists('siitec2.api.client_id', $_ENV)) {
+            $this->setClientId($_ENV['siitec2.api.client_id']);
+        }
+        if (array_key_exists('siitec2.api.client_secret', $_ENV)) {
+            $this->setClientSecret($_ENV['siitec2.api.client_secret']);
+        }
 
         $this->handlerAccessTokenChanged = function(AccessToken $accessToken) {
             $_SESSION['access_token'] = $accessToken;
