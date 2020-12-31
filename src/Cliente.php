@@ -19,6 +19,9 @@ use Psr\Http\Message\UriInterface;
 
 class Cliente
 {
+    const ACCESS_TOKEN_KEY = 'siitec2.access_token';
+    const CLIENT_ACCESS_TOKEN_KEY = 'siitec2.client_access_token';
+
     private $oauth2;
     private $httpFactory;
     private $httpClient;
@@ -28,6 +31,10 @@ class Cliente
     private $handlerAccessTokenChanged;
     private $handlerAccessTokenLoad;
     private $handlerAccessTokenRevoke;
+
+    private $handlerClientAccessTokenChanged;
+    private $handlerClientAccessTokenLoad;
+    private $handlerClientAccessTokenRevoke;
 
     public function __construct(
         ?string $configFile = null,
@@ -52,24 +59,44 @@ class Cliente
         if (array_key_exists('siitec2.api.client_secret', $_ENV)) {
             $this->setClientSecret($_ENV['siitec2.api.client_secret']);
         }
+        if (array_key_exists('SIITEC2_API_CLIENT_ID', $_ENV)) {
+            $this->setClientId($_ENV['SIITEC2_API_CLIENT_ID']);
+        }
+        if (array_key_exists('SIITEC2_API_CLIENT_SECRET', $_ENV)) {
+            $this->setClientSecret($_ENV['SIITEC2_API_CLIENT_SECRET']);
+        }
 
         $this->handlerAccessTokenChanged = function(AccessToken $accessToken) {
-            $_SESSION['access_token'] = $accessToken;
+            $_SESSION[static::ACCESS_TOKEN_KEY] = $accessToken;
         };
         $this->handlerAccessTokenLoad = function() {
-            if (isset($_SESSION['access_token']) && $_SESSION['access_token'] instanceof AccessToken) {
-                $this->setAccessToken($_SESSION['access_token']);
+            if (isset($_SESSION[static::ACCESS_TOKEN_KEY]) && $_SESSION[static::ACCESS_TOKEN_KEY] instanceof AccessToken) {
+                $this->setAccessToken($_SESSION[static::ACCESS_TOKEN_KEY]);
             }
         };
         $this->handlerAccessTokenRevoke = function() {
-            if (isset($_SESSION['access_token']) && $_SESSION['access_token'] instanceof AccessToken) {
-                unset($_SESSION['access_token']);
+            if (isset($_SESSION[static::ACCESS_TOKEN_KEY]) && $_SESSION[static::ACCESS_TOKEN_KEY] instanceof AccessToken) {
+                unset($_SESSION[static::ACCESS_TOKEN_KEY]);
             }
+        };
+        $this->handlerClientAccessTokenChanged = function(AccessToken $accessToken) {
+            $_SESSION[static::CLIENT_ACCESS_TOKEN_KEY] = $accessToken;
+        };
+        $this->handlerClientAccessTokenLoad = function() {
+            if (isset($_SESSION[static::CLIENT_ACCESS_TOKEN_KEY]) && $_SESSION[static::CLIENT_ACCESS_TOKEN_KEY] instanceof AccessToken) {
+                $this->setClientAccessToken($_SESSION[static::CLIENT_ACCESS_TOKEN_KEY]);
+            }
+        };
+        $this->handlerClientAccessTokenRevoke = function(AccessToken $accessToken) {
+            $_SESSION[static::CLIENT_ACCESS_TOKEN_KEY] = $accessToken;
         };
 
         $self = $this;
         $this->oauth2->setAccessTokenChangedHandler(function(AccessToken $accessToken) use ($self) {
             call_user_func($self->handlerAccessTokenChanged, $accessToken);
+        });
+        $this->oauth2->setClientAccessTokenChangedHandler(function(AccessToken $accessToken) use ($self) {
+            call_user_func($self->handlerClientAccessTokenChanged, $accessToken);
         });
         $this->loadAccessToken();
     }
@@ -137,9 +164,20 @@ class Cliente
         return $this->oauth2->getAccessToken();
     }
 
+    public function setClientAccessToken(AccessToken $accessToken)
+    {
+        $this->oauth2->setClientAccessToken($accessToken);
+    }
+
+    public function getClientAccessToken()
+    {
+        return $this->oauth2->getClientAccessToken();
+    }
+
     public function loadAccessToken()
     {
         call_user_func($this->handlerAccessTokenLoad);
+        call_user_func($this->handlerClientAccessTokenLoad);
     }
 
     public function setAccessTokenLoadHandler(callable $handler)
@@ -227,5 +265,6 @@ class Cliente
     public function revoke()
     {
         call_user_func($this->handlerAccessTokenRevoke);
+        call_user_func($this->handlerClientAccessTokenRevoke);
     }
 }

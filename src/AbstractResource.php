@@ -15,16 +15,23 @@ abstract class AbstractResource
 {
     private $cliente;
     private $requiresAccessToken;
+    private $requiresClientAccessToken;
 
     public function __construct(Cliente $cliente)
     {
         $this->cliente = $cliente;
         $this->requiresAccessToken = false;
+        $this->requiresClientAccessToken = false;
     }
 
     protected function requiresAccessToken(bool $requires = true)
     {
         $this->requiresAccessToken = $requires;
+    }
+
+    protected function requiresClientAccessToken(bool $requires = true)
+    {
+        $this->requiresClientAccessToken = $requires;
     }
 
     protected function buildRequest(
@@ -47,6 +54,8 @@ abstract class AbstractResource
         $request = $requestFactory->createRequest($method, $uri);
         if ($this->requiresAccessToken) {
             $request = $this->cliente->getUserAuth()->bindAccessToken($request);
+        } elseif ($this->requiresClientAccessToken) {
+            $request = $this->cliente->getUserAuth()->bindClientAccessToken($request);
         }
 
         if (isset($content)) {
