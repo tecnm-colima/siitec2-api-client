@@ -59,6 +59,7 @@ abstract class AbstractResource
         }
 
         if (isset($content)) {
+            MessageHelper::setHttpFactoryManager($this->cliente->getHttpFactory());
             $request = MessageHelper::withContent($request, $mediaType, $content);
         }
 
