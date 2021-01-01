@@ -20,9 +20,9 @@ class Email implements JsonSerializable
     {
         $content = MessageHelper::getContent($message);
         $email = new static();
-        $email->to = is_array($content->to) ? $content->to : [];
-        $email->cc = is_array($content->cc) ? $content->cc : [];
-        $email->bcc = is_array($content->bcc) ? $content->bcc : [];
+        $email->to = is_object($content->to) || is_array($content->to) ? (array)$content->to : [];
+        $email->cc = is_object($content->cc) || is_array($content->cc) ? (array)$content->cc : [];
+        $email->bcc = is_object($content->bcc) || is_array($content->bcc) ? (array)$content->bcc : [];
         $email->contentType = is_string($content->contentType) ? $content->contentType : 'text/plain';
         $email->charset = is_string($content->charset) ? $content->charset : null;
         $email->subject = is_string($content->subject) ? $content->subject : '';
