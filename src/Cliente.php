@@ -87,8 +87,10 @@ class Cliente
                 $this->setClientAccessToken($_SESSION[static::CLIENT_ACCESS_TOKEN_KEY]);
             }
         };
-        $this->handlerClientAccessTokenRevoke = function(AccessToken $accessToken) {
-            $_SESSION[static::CLIENT_ACCESS_TOKEN_KEY] = $accessToken;
+        $this->handlerClientAccessTokenRevoke = function() {
+            if (isset($_SESSION[static::CLIENT_ACCESS_TOKEN_KEY]) && $_SESSION[static::CLIENT_ACCESS_TOKEN_KEY] instanceof AccessToken) {
+                unset($_SESSION[static::CLIENT_ACCESS_TOKEN_KEY]);
+            }
         };
 
         $self = $this;
