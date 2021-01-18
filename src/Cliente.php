@@ -12,6 +12,7 @@ use Francerz\OAuth2\AccessToken;
 use Francerz\OAuth2\Client\AuthClient;
 use Francerz\PowerData\Functions;
 use InvalidArgumentException;
+use PHPUnit\TextUI\XmlConfiguration\Constant;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -154,6 +155,11 @@ class Cliente
             throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
         }
         $this->apiEndpoint = $uri;
+    }
+
+    public static function getPlatformUrl() : string
+    {
+        return Constants::PLATFORM_URL;
     }
 
     public function setAccessToken(AccessToken $accessToken)

@@ -4,7 +4,7 @@ namespace ITColima\Siitec2\Api;
 
 class Constants
 {
-    const SIITEC2_URI = 'https://siitec2.colima.tecnm.mx';
+    const PLATFORM_URL = 'https://siitec2.colima.tecnm.mx';
 
     const AUTHORIZE_ENDPOINT = 'https://siitec2.colima.tecnm.mx/index.php/oauth2/authorize';
     const TOKEN_ENDPOINT = 'https://siitec2.colima.tecnm.mx/index.php/oauth2/token';
