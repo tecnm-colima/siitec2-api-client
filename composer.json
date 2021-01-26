@@ -1,6 +1,6 @@
 {
-    "name": "itcolima/siitec2-api-lib",
-    "description": "PHP ITColima SIITEC 2 API Library",
+    "name": "itcolima/siitec2-api-client",
+    "description": "PHP ITColima SIITEC 2 API Client",
     "autoload": {
         "psr-4": {
             "ITColima\\Siitec2\\Api\\" : "src"
