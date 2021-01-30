@@ -41,7 +41,7 @@ abstract class AbstractResource
         $content = null,
         string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED) : RequestInterface
     {
-        $uri = $this->cliente->getApiUri();
+        $uri = $this->cliente->getApiEndpoint();
         $uri = UriHelper::appendPath($uri, $path);
         if (!empty($params)) {
             $uri = UriHelper::withQueryParams($uri, $params);
@@ -50,16 +50,16 @@ abstract class AbstractResource
             $uri = $uri->withFragment($fragment);
         }
 
-        $requestFactory = $this->cliente->getHttpFactory()->getRequestFactory();
+        $requestFactory = $this->cliente->getHttpFactoryManager()->getRequestFactory();
         $request = $requestFactory->createRequest($method, $uri);
         if ($this->requiresAccessToken) {
-            $request = $this->cliente->getUserAuth()->bindAccessToken($request);
+            $request = $this->cliente->getOAuth2Client()->bindAccessToken($request);
         } elseif ($this->requiresClientAccessToken) {
-            $request = $this->cliente->getUserAuth()->bindClientAccessToken($request);
+            $request = $this->cliente->getOAuth2Client()->bindClientAccessToken($request);
         }
 
         if (isset($content)) {
-            MessageHelper::setHttpFactoryManager($this->cliente->getHttpFactory());
+            MessageHelper::setHttpFactoryManager($this->cliente->getHttpFactoryManager());
             $request = MessageHelper::withContent($request, $mediaType, $content);
         }
 
