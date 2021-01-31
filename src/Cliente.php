@@ -98,7 +98,7 @@ class Cliente extends AbstractClient
         }
 
         $url = UriHelper::getCurrent($uriFactory);
-        $loginUri = UriHelper::withQueryParam($loginUri, 'redir', $url);
+        $loginUri = UriHelper::withQueryParam($loginUri, 'redir', (string)$url);
 
         $response = $responseFactory
             ->createResponse(StatusCodes::REDIRECT_TEMPORARY_REDIRECT)
@@ -121,8 +121,8 @@ class Cliente extends AbstractClient
             $redirectUri = $uriFactory->createUri(
                 UriHelper::getQueryParam($authUri, 'redirect_uri')
             );
-            $redirectUri = UriHelper::withQueryParam($redirectUri, 'redir', $redir);
-            $authUri = UriHelper::withQueryParam($authUri, 'redirect_uri', $redirectUri);
+            $redirectUri = UriHelper::withQueryParam($redirectUri, 'redir', (string)$redir);
+            $authUri = UriHelper::withQueryParam($authUri, 'redirect_uri', (string)$redirectUri);
         }
 
         $response = $responseFactory
