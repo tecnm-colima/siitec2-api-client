@@ -85,50 +85,22 @@ class Cliente extends AbstractClient
 
     public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
     {
-        return $this->getOAuth2Client()->getAuthorizationCodeRequestUri($scopes, $state);
+        return parent::makeRequestAuthorizationCodeUri($scopes, $state);
     }
 
-    public function requireLogin($loginUri)
+    public function redirectAuthUri($loginUri)
     {
-        $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
-        $responseFactory = $this->getHttpFactoryManager()->getResponseFactory();
+        return parent::makeAuthorizeRedirUri($loginUri);
+    }
 
-        if (is_string($loginUri)) {
-            $loginUri = $uriFactory->createUri($loginUri);
-        }
-
-        $url = UriHelper::getCurrent($uriFactory);
-        $loginUri = UriHelper::withQueryParam($loginUri, 'redir', (string)$url);
-
-        $response = $responseFactory
-            ->createResponse(StatusCodes::REDIRECT_TEMPORARY_REDIRECT)
-            ->withHeader('Location', $loginUri);
-        return $response;
+    public function redirectAuthRequest($loginUri)
+    {
+        return parent::makeAuthorizeRedirResponse($loginUri);
     }
 
     public function getLoginRequest(array $scopes = [], string $state = '') : ResponseInterface
     {
-        $responseFactory = $this->getHttpFactoryManager()->getResponseFactory();
-        $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
-
-
-        $authUri = $this->getAuthCodeUri($scopes, $state);
-
-        # Adds redirection to invoked source
-        $currentUri = UriHelper::getCurrent($uriFactory);
-        $redir = UriHelper::getQueryParam($currentUri, 'redir');
-        if (!empty($redir)) {
-            $redirectUri = $uriFactory->createUri(
-                UriHelper::getQueryParam($authUri, 'redirect_uri')
-            );
-            $redirectUri = UriHelper::withQueryParam($redirectUri, 'redir', (string)$redir);
-            $authUri = UriHelper::withQueryParam($authUri, 'redirect_uri', (string)$redirectUri);
-        }
-
-        $response = $responseFactory
-            ->createResponse(StatusCodes::REDIRECT_TEMPORARY_REDIRECT)
-            ->withHeader('Location', $authUri);
-        return $response;
+        return parent::makeRequestAuthorizationCodeRedirect($scopes, $state);
     }
 
     public function performLogin( array $scopes = [], string $state = '', ?ServerInterface $server = null)
@@ -142,32 +114,12 @@ class Cliente extends AbstractClient
 
     public function setLoginHandlerUri($uri)
     {
-        if (is_string($uri)) {
-            $uri = $this->getHttpFactoryManager()->getUriFactory()->createUri($uri);
-        }
-        if (!$uri instanceof UriInterface) {
-            throw new InvalidArgumentException(__METHOD__.' $uri argument must be string or UriInterface object');
-        }
-        $this->getOAuth2Client()->setCallbackEndpoint($uri);
+        parent::setCallbackEndpoint($uri);
     }
 
     public function handleLogin(?ServerRequestInterface $request = null)
     {
-        if (is_null($request)) {
-            MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
-            $request = MessageHelper::getCurrentRequest();
-        }
-        $requestUri = $request->getUri();
-        $this->redirUri = UriHelper::getQueryParam($requestUri, 'redir');
-        $this->getOAuth2Client()->handleCallbackRequest($request);
-    }
-
-    public function getRedir($defaultUri)
-    {
-        if (isset($this->redirUri)) {
-            return $this->redirUri;
-        }
-        return $defaultUri;
+        return parent::handleAuthorizeResponse($request);
     }
 
     public function revoke()
