@@ -5,20 +5,18 @@ use Francerz\ApiClient\AbstractClient;
 use Francerz\Http\Client as HttpClient;
 use Francerz\Http\HttpFactory;
 use Francerz\Http\Server;
-use Francerz\Http\Utils\Constants\StatusCodes;
 use Francerz\Http\Utils\HttpFactoryManager;
-use Francerz\Http\Utils\MessageHelper;
 use Francerz\Http\Utils\ServerInterface;
-use Francerz\Http\Utils\UriHelper;
-use InvalidArgumentException;
+use ITColima\Siitec2\Api\Resources\Usuario\PerfilResource;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 class Cliente extends AbstractClient
-{  
-    private $redirUri = null;
+{
+    private $perfil = null;
+
     public function __construct(
         ?string $configFile = null,
         ?HttpFactoryManager $httpFactory = null,
@@ -48,13 +46,7 @@ class Cliente extends AbstractClient
     }
 
     private function loadConfigEnv()
-    {   
-        if (array_key_exists('siitec2.api.client_id', $_ENV)) {
-            $this->setClientId($_ENV['siitec2.api.client_id']);
-        }
-        if (array_key_exists('siitec2.api.client_secret', $_ENV)) {
-            $this->setClientSecret($_ENV['siitec2.api.client_secret']);
-        }
+    {
         if (array_key_exists('SIITEC2_API_CLIENT_ID', $_ENV)) {
             $this->setClientId($_ENV['SIITEC2_API_CLIENT_ID']);
         }
@@ -100,10 +92,11 @@ class Cliente extends AbstractClient
 
     public function getLoginRequest(array $scopes = [], string $state = '') : ResponseInterface
     {
+        $scopes = array_merge($scopes, [Scopes::GET_USUARIO_PERFIL_OWN]);
         return parent::makeRequestAuthorizationCodeRedirect($scopes, $state);
     }
 
-    public function performLogin( array $scopes = [], string $state = '', ?ServerInterface $server = null)
+    public function performLogin(array $scopes = [], string $state = '', ?ServerInterface $server = null)
     {
         if (is_null($server)) {
             $server = new Server();
@@ -119,11 +112,48 @@ class Cliente extends AbstractClient
 
     public function handleLogin(?ServerRequestInterface $request = null)
     {
-        return parent::handleAuthorizeResponse($request);
+        $at = parent::handleAuthorizeResponse($request);
+
+        if (isset($at)) {
+            $this->retrievePerfil();
+        }
+
+        return $at;
     }
 
     public function revoke()
     {
+        $this->unsetPerfil();
         $this->revokeAcccessToken();
     }
+
+    #region Perfil (ResourceOwner)
+    private function retrievePerfil()
+    {
+        $perfilResource = new PerfilResource($this);
+        $this->perfil = $_SESSION['siitec2.perfil'] = $perfilResource->getOwn();
+    }
+
+    private function loadPerfilFromSession()
+    {
+        $s2pk = 'siitec2.perfil';
+        if (array_key_exists($s2pk, $_SESSION) && is_object($_SESSION[$s2pk])) {
+            $this->perfil = $_SESSION[$s2pk];
+        }
+    }
+
+    private function unsetPerfil()
+    {
+        unset($this->perfil);
+        unset($_SESSION['siitec2.perfil']);
+    }
+
+    public function getPerfil()
+    {
+        if (is_null($this->perfil)) {
+            $this->loadPerfilFromSession();
+        }
+        return $this->perfil;
+    }
+    #endregion
 }
