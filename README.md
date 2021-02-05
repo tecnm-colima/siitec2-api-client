@@ -8,7 +8,7 @@ La instalación del paquete se puede hacer mediante **composer** utilizando el
 siguiente comando:
 
 ```
-composer required itcolima/siitec2-api-client
+composer require itcolima/siitec2-api-client
 ```
 
 Inicialización
