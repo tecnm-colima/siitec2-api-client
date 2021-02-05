@@ -79,6 +79,11 @@ class Cliente extends AbstractClient
         return Constants::PLATFORM_URL;
     }
 
+    public static function getLogoutUrl() : string
+    {
+        return Constants::PLATFORM_URL.'/index.php/usuarios/logout';
+    }
+
     public function getOAuth2Client()
     {
         return parent::getOAuth2Client();
