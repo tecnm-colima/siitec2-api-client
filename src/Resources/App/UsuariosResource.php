@@ -7,6 +7,13 @@ use Francerz\Http\Utils\MessageHelper;
 
 class UsuariosResource extends AbstractResource
 {
+    public function getById($id, array $params = [])
+    {
+        $this->requiresClientAccessToken(true);
+        $response = $this->get("/app/usuarios/{$id}", $params);
+        return MessageHelper::getContent($response);
+    }
+
     public function findTerm($term, array $params = [])
     {
         $this->requiresClientAccessToken(true);
