@@ -10,7 +10,7 @@ class ReinscripcionesResource extends AbstractResource
     public function put(Reinscripcion $reins)
     {
         $this->requiresClientAccessToken();
-        $response = $this->_put("/escolares/resincripciones/{$reins->id_estudiante}/{$reins->id_periodo}", null);
+        $response = $this->_put("/escolares/reinscripciones/{$reins->id_estudiante}/{$reins->id_periodo}", null);
         return $response;
     }
 }
