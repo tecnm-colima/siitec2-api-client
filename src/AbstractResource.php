@@ -70,9 +70,9 @@ abstract class AbstractResource
     {
         $response = $this->cliente->getHttpClient()->sendRequest($request);
         if (MessageHelper::isClientError($response)) {
-            throw new ClientErrorException($request, $response, "HTTP Client error: {$response->getStatusCode()}");
+            throw new ClientErrorException($request, $response, "HTTP Client error: {$response->getStatusCode()}".print_r($response->getBody(), true));
         } elseif (MessageHelper::isServerError($response)) {
-            throw new ServerErrorException($request, $response, "HTTP Server error: {$response->getStatusCode()}");
+            throw new ServerErrorException($request, $response, "HTTP Server error: {$response->getStatusCode()}".print_r($response->getBody(), true));
         }
         return $response;
     }
