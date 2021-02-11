@@ -10,7 +10,7 @@ class UsuariosResource extends AbstractResource
     public function getById($id, array $params = [])
     {
         $this->requiresClientAccessToken(true);
-        $response = $this->get("/app/usuarios/{$id}", $params);
+        $response = $this->_get("/app/usuarios/{$id}", $params);
         return MessageHelper::getContent($response);
     }
 
@@ -18,7 +18,7 @@ class UsuariosResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $params['q'] = $term;
-        $response = $this->get('/app/usuarios', $params);
+        $response = $this->_get('/app/usuarios', $params);
         return MessageHelper::getContent($response);
     }
 
@@ -26,7 +26,7 @@ class UsuariosResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $params['matricula'] = $matricula;
-        $response = $this->get('/app/usuarios', $params);
+        $response = $this->_get('/app/usuarios', $params);
         return MessageHelper::getContent($response);
     }
 }

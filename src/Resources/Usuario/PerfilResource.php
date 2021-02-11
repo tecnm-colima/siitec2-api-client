@@ -9,7 +9,7 @@ class PerfilResource extends AbstractResource
     public function getOwn()
     {
         $this->requiresAccessToken(true);
-        $response = $this->get('/usuarios/perfil/own');
+        $response = $this->_get('/usuarios/perfil/own');
         return MessageHelper::getContent($response);
     }
 }

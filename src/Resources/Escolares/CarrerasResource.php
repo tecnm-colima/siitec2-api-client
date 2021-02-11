@@ -10,7 +10,7 @@ class CarrerasResource extends AbstractResource
     public function getAll(array $params = [])
     {
         $this->requiresAccessToken(false);
-        $response = $this->get('/escolares/carreras', $params);
+        $response = $this->_get('/escolares/carreras', $params);
         return MessageHelper::getContent($response);
     }
 
@@ -20,7 +20,7 @@ class CarrerasResource extends AbstractResource
             $carrera_id = join('+', $carrera_id);
         }
         $this->requiresAccessToken(false);
-        $response = $this->get("/escolares/carreras/{$carrera_id}", $params);
+        $response = $this->_get("/escolares/carreras/{$carrera_id}", $params);
         return MessageHelper::getContent($response);
     }
 }

@@ -77,31 +77,31 @@ abstract class AbstractResource
         return $response;
     }
 
-    protected function get(string $path, array $params = [])
+    protected function _get(string $path, array $params = [])
     {
         $request = $this->buildRequest(Methods::GET, $path, $params);
         return $this->sendRequest($request);
     }
 
-    protected function post(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
+    protected function _post(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
     {
         $request = $this->buildRequest(Methods::POST, $path, [], $content, $mediaType);
         return $this->sendRequest($request);
     }
 
-    protected function put(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
+    protected function _put(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
     {
         $request = $this->buildRequest(Methods::PUT, $path, [], $content, $mediaType);
         return $this->sendRequest($request);
     }
     
-    protected function patch(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
+    protected function _patch(string $path, $content, string $mediaType = MediaTypes::APPLICATION_X_WWW_FORM_URLENCODED)
     {
         $request = $this->buildRequest(Methods::PATCH, $path, [], $content, $mediaType);
         return $this->sendRequest($request);
     }
 
-    protected function delete(string $path)
+    protected function _delete(string $path)
     {
         $request = $this->buildRequest(Methods::DELETE, $path);
         return $this->sendRequest($request);
