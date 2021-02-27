@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Model\Escolares;
 
-class Reinscripcion
+class Inscripcion
 {
     public $id_estudiante;
     public $id_periodo;
