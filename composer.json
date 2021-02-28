@@ -10,9 +10,9 @@
         "francerz/oauth2-client": "^0.2",
         "psr/http-client": "^1.0",
         "francerz/http": "^0.2.4",
-        "francerz/api-client": "^0.1.0"
+        "francerz/api-client": "^0.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.2"
+        "phpunit/phpunit": "^8.5"
     }
 }

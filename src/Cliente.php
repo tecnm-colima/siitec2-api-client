@@ -6,7 +6,11 @@ use Francerz\Http\Client as HttpClient;
 use Francerz\Http\HttpFactory;
 use Francerz\Http\Server;
 use Francerz\Http\Utils\HttpFactoryManager;
+use Francerz\Http\Utils\MessageHelper;
 use Francerz\Http\Utils\ServerInterface;
+use Francerz\Http\Utils\UriHelper;
+use Francerz\OAuth2\ScopeHelper;
+use InvalidArgumentException;
 use ITColima\Siitec2\Api\Resources\Usuario\PerfilResource;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,6 +20,9 @@ use Psr\Http\Message\UriInterface;
 class Cliente extends AbstractClient
 {
     private $perfil = null;
+
+    private $loginHandlerUri = null;
+    private $logoutUri = null;
 
     public function __construct(
         ?string $configFile = null,
@@ -53,6 +60,9 @@ class Cliente extends AbstractClient
         if (array_key_exists('SIITEC2_API_CLIENT_SECRET', $_ENV)) {
             $this->setClientSecret($_ENV['SIITEC2_API_CLIENT_SECRET']);
         }
+        if (array_key_exists('SIITEC2_API_CLIENT_LOGOUT_URI', $_ENV)) {
+            $this->logoutUri = $_ENV['SIITEC2_API_CLIENT_LOGOUT_URI'];
+        } 
         if (array_key_exists('SIITEC2_API_AUTHORIZE_ENDPOINT', $_ENV)) {
             $this->getOAuth2Client()->setAuthorizationEndpoint($_ENV['SIITEC2_API_AUTHORIZE_ENDPOINT']);
         }
@@ -89,25 +99,65 @@ class Cliente extends AbstractClient
         return parent::getOAuth2Client();
     }
 
-    public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
-    {
-        return parent::makeRequestAuthorizationCodeUri($scopes, $state);
-    }
-
+    /**
+     * Creates an URI for login and 'redir' query parameter to return after
+     * login process completed.
+     *
+     * @param string|UriInterface $loginUri
+     * @return UriInterface
+     */
     public function redirectAuthUri($loginUri)
     {
         return parent::makeAuthorizeRedirUri($loginUri);
     }
 
+    /**
+     * @deprecated 0.1.17
+     * Creates a Redirect response for redirectAuthUri()
+     *
+     * @param string|UriInterface $loginUri
+     * @return ResponseInterface
+     */
     public function redirectAuthRequest($loginUri)
     {
-        return parent::makeAuthorizeRedirResponse($loginUri);
+        $uri = $this->redirectAuthUri($loginUri);
+        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
+        return MessageHelper::makeRedirect($uri);
+    }
+
+    /**
+     * Adds 'redir' parameter from login to login_handler.
+     *
+     * @param UriInterface $handlerUri
+     * @return void
+     */
+    protected function addFollowParameters(UriInterface $handlerUri)
+    {
+        $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
+        $currentUri = UriHelper::getCurrent($uriFactory);
+        return UriHelper::copyQueryParams($handlerUri, $currentUri, ['redir']);
+    }
+
+    /**
+     * @deprecated 0.1.17
+     * Retrieves OAuth 2.0 Authorization Code Uri adapted to given $scopes and $state
+     *
+     * @param array $scopes
+     * @param string $state
+     * @return UriInterface
+     */
+    public function getAuthCodeUri(array $scopes = [], string $state = '') : UriInterface
+    {
+        $loginHandlerUri = $this->addFollowParameters($this->loginHandlerUri);
+        $scopes = ScopeHelper::merge($scopes, [Scopes::GET_USUARIO_PERFIL_OWN]);
+        return parent::makeRequestAuthorizationCodeUri($loginHandlerUri, $scopes, $state);
     }
 
     public function getLoginRequest(array $scopes = [], string $state = '') : ResponseInterface
     {
-        $scopes = array_merge($scopes, [Scopes::GET_USUARIO_PERFIL_OWN]);
-        return parent::makeRequestAuthorizationCodeRedirect($scopes, $state);
+        $authCodeUri = $this->getAuthCodeUri($scopes, $state);
+        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
+        return MessageHelper::makeRedirect($authCodeUri);
     }
 
     public function performLogin(array $scopes = [], string $state = '', ?ServerInterface $server = null)
@@ -121,7 +171,37 @@ class Cliente extends AbstractClient
 
     public function setLoginHandlerUri($uri)
     {
-        parent::setCallbackEndpoint($uri);
+        $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
+        if (is_string($uri)) {
+            $uri = $uriFactory->createUri($uri);
+        }
+        $this->loginHandlerUri = $uri;
+    }
+
+    public function login($handlerUri, $logoutUri, array $scopes = [], string $state = '')
+    {
+        $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
+
+        if (is_string($handlerUri)) {
+            $handlerUri = $uriFactory->createUri($handlerUri);
+        }
+        if (!$handlerUri instanceof UriInterface) {
+            throw new InvalidArgumentException('Invalid $handlerUri.');
+        }
+
+        if (is_string($logoutUri)) {
+            $logoutUri = $uriFactory->createUri($logoutUri);
+        }
+        if (!$logoutUri instanceof UriInterface) {
+            throw new InvalidArgumentException('Invalid $logoutUri.');
+        }
+
+        $handlerUri = $this->addFollowParameters($handlerUri);
+        $scopes = ScopeHelper::merge($scopes, [Scopes::GET_USUARIO_PERFIL_OWN]);
+        $uri = parent::makeRequestAuthorizationCodeUri($handlerUri, $scopes, $state);
+
+        $uri = UriHelper::withQueryParam($uri, 'logout', $logoutUri);
+        return MessageHelper::makeRedirect($uri);
     }
 
     public function handleLogin(?ServerRequestInterface $request = null)
@@ -133,12 +213,6 @@ class Cliente extends AbstractClient
         }
 
         return $at;
-    }
-
-    public function revoke()
-    {
-        $this->unsetPerfil();
-        $this->revokeAcccessToken();
     }
 
     #region Perfil (ResourceOwner)
@@ -170,4 +244,44 @@ class Cliente extends AbstractClient
         return $this->perfil;
     }
     #endregion
+
+    /**
+     * Checks that User (Resource Owner) granted access.
+     *
+     * @return boolean
+     */
+    public function isLoggedIn()
+    {
+        return isset($this->perfil);
+    }
+
+    /**
+     * Revokes all tokens and user data.
+     *
+     * @return void
+     */
+    public function revoke()
+    {
+        $this->unsetPerfil();
+        $this->revokeAcccessToken();
+    }
+
+    /**
+     * Handles direct logout.
+     *
+     * @return ResponseInterface
+     */
+    public function handleLogout() : ResponseInterface
+    {
+        $this->revoke();
+
+        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
+        $currentUri = UriHelper::getCurrent($this->getHttpFactoryManager()->getUriFactory());
+        $continue = UriHelper::getQueryParam($currentUri, 'continue');
+
+        if (!empty($continue)) {
+            return MessageHelper::makeRedirect($continue);
+        }
+        return MessageHelper::makeRedirect(static::getPlatformUrl());
+    }
 }
