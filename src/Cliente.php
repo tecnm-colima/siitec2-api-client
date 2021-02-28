@@ -201,6 +201,8 @@ class Cliente extends AbstractClient
         $uri = parent::makeRequestAuthorizationCodeUri($handlerUri, $scopes, $state);
 
         $uri = UriHelper::withQueryParam($uri, 'logout', $logoutUri);
+        
+        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
         return MessageHelper::makeRedirect($uri);
     }
 
