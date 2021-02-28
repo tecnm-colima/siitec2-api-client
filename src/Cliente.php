@@ -135,7 +135,7 @@ class Cliente extends AbstractClient
     {
         $uriFactory = $this->getHttpFactoryManager()->getUriFactory();
         $currentUri = UriHelper::getCurrent($uriFactory);
-        return UriHelper::copyQueryParams($handlerUri, $currentUri, ['redir']);
+        return UriHelper::copyQueryParams($currentUri, $handlerUri, ['redir']);
     }
 
     /**
