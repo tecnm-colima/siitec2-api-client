@@ -254,7 +254,7 @@ class Cliente extends AbstractClient
      */
     public function isLoggedIn()
     {
-        return isset($this->perfil);
+        return !is_null($this->getPerfil());
     }
 
     /**
