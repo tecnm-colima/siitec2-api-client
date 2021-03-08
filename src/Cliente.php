@@ -16,6 +16,7 @@ use Psr\Http\Client\ClientInterface as HttpClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use RuntimeException;
 
 class Cliente extends AbstractClient
 {
@@ -221,7 +222,12 @@ class Cliente extends AbstractClient
     private function retrievePerfil()
     {
         $perfilResource = new PerfilResource($this);
-        $this->perfil = $_SESSION['siitec2.perfil'] = $perfilResource->getOwn();
+        $perfil = $perfilResource->getOwn();
+        if (!is_object($perfil)) {
+            $perfil = is_string($perfil) ? $perfil : print_r($perfil);
+            throw new RuntimeException("Failed retrieving perfil from API. {$perfil}");
+        }
+        $this->perfil = $_SESSION['siitec2.perfil'] = $perfil;
     }
 
     private function loadPerfilFromSession()
