@@ -25,4 +25,28 @@ class EstudiantesResource extends AbstractResource
         }
         return reset($output);
     }
+
+    public function getById($id, array $params=[])
+    {
+        $this->requiresClientAccessToken();
+        $id = is_array($id) ? implode('+', $id) : $id;
+        $response = $this->_get("/escolares/estudiantes/{$id}", $params);
+        $output = MessageHelper::getContent($response);
+        if (empty($output)) {
+            return null;
+        }
+        return reset($output);
+    }
+
+    public function getByUsuarioId($id, array $params=[])
+    {
+        $this->requiresClientAccessToken();
+        $params['usuario_id'] = is_array($id) ? implode('+', $id) : $id;
+        $response = $this->_get("/escolares/estudiantes", $params);
+        $output = MessageHelper::getContent($response);
+        if (empty($output)) {
+            return null;
+        }
+        return reset($output);
+    }
 }
