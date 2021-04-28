@@ -12,7 +12,7 @@ class PeriodosResource extends AbstractResource
      *
      * @param array $params
      *  - fin_desde: Periodos que terminen a partir del a fecha proporcionada
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {

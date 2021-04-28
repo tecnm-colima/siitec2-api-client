@@ -14,7 +14,7 @@ class InscripcionResource extends AbstractResource
      *  - carrera: ID de la carrera a la que aplica el proceso de inscripción.
      *  - periodo: ID del periodo al a que aplica el proceso de inscripción.
      *  - vigente: Fecha del periodo de inscripción o @now para el tiempo actual.
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {

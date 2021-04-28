@@ -25,7 +25,7 @@ class UsuariosResource extends AbstractResource
      *  - correo: Dirección de correo electrónico
      *  - usuario: Nombre de usuario utilizado para ingresar a SIITEC
      *  - nombre: Nombre o Apellidos del usuario
-     * @return void
+     * @return array
      */
     public function find(array $params=[])
     {

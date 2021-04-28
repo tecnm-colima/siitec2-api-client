@@ -9,7 +9,7 @@ class PerfilResource extends AbstractResource
     /**
      * Obtiene el perfil del usuario actual.
      *
-     * @return void
+     * @return object
      */
     public function getOwn()
     {

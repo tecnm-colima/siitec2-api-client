@@ -14,7 +14,7 @@ class PreinscripcionResource extends AbstractResource
      *  - carrera: ID de la carrera a la que aplica el proceso de preinscripción.
      *  - periodo: ID del periodo al a que aplica el proceso de preinscripción.
      *  - vigente: Fecha del periodo de preinscripción o @now para el tiempo actual.
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {

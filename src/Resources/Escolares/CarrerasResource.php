@@ -11,7 +11,7 @@ class CarrerasResource extends AbstractResource
      * Obtiene un listado de carreras disponibles en el sistema.
      *
      * @param array $params
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {

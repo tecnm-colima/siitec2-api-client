@@ -13,7 +13,7 @@ class EstudiantesResource extends AbstractResource
      * @param array $params
      *  - num_control: Número de control de estudiante.
      *  - usuario_id: ID de usuario de estudiante.
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {

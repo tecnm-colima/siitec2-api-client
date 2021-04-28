@@ -19,7 +19,7 @@ class GruposResource extends AbstractResource
      *  - link_carrera: Indica que se obtiene la carrera del grupo.
      *  - link_plan_estudio: Indica que se obtiene el plan de estudio del grupo.
      *  - link_asignatura: Indica que se obtiene la asignatura del grupo.
-     * @return void
+     * @return array
      */
     public function getAll(array $params = [])
     {
