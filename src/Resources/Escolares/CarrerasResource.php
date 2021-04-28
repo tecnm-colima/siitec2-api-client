@@ -7,6 +7,12 @@ use ITColima\Siitec2\Api\AbstractResource;
 
 class CarrerasResource extends AbstractResource
 {
+    /**
+     * Obtiene un listado de carreras disponibles en el sistema.
+     *
+     * @param array $params
+     * @return void
+     */
     public function getAll(array $params = [])
     {
         $this->requiresAccessToken(false);

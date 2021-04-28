@@ -7,6 +7,13 @@ use ITColima\Siitec2\Api\AbstractResource;
 
 class PeriodosResource extends AbstractResource
 {
+    /**
+     * Obtiene los periodos escolares según los parámetros proporcionados
+     *
+     * @param array $params
+     *  - fin_desde: Periodos que terminen a partir del a fecha proporcionada
+     * @return void
+     */
     public function getAll(array $params = [])
     {
         $this->requiresAccessToken(false);

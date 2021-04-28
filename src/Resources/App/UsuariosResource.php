@@ -14,6 +14,26 @@ class UsuariosResource extends AbstractResource
         return MessageHelper::getContent($response);
     }
 
+    /**
+     * Find a user by given parameter
+     *
+     * @param array $params
+     *  - term: Termino de búsqueda
+     *  - matricula: Número de control o ID de aspirante
+     *  - rol: Tipo de usuario (alumno, aspirante, empleado)
+     *  - curp: CURP del usuario
+     *  - correo: Dirección de correo electrónico
+     *  - usuario: Nombre de usuario utilizado para ingresar a SIITEC
+     *  - nombre: Nombre o Apellidos del usuario
+     * @return void
+     */
+    public function find(array $params=[])
+    {
+        $this->requiresClientAccessToken(true);
+        $response = $this->_get('/app/usuarios', $params);
+        return MessageHelper::getContent($response);
+    }
+
     public function findTerm($term, array $params = [])
     {
         $this->requiresClientAccessToken(true);
@@ -26,6 +46,14 @@ class UsuariosResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $params['matricula'] = $matricula;
+        $response = $this->_get('/app/usuarios', $params);
+        return MessageHelper::getContent($response);
+    }
+
+    public function findCurp($curp, array $params = []) 
+    {
+        $this->requiresClientAccessToken(true);
+        $params['curp'] = $curp;
         $response = $this->_get('/app/usuarios', $params);
         return MessageHelper::getContent($response);
     }

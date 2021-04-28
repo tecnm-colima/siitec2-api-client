@@ -7,6 +7,15 @@ use ITColima\Siitec2\Api\AbstractResource;
 
 class PreinscripcionResource extends AbstractResource
 {
+    /**
+     * Obtiene los procesos de pago de Inscripción
+     *
+     * @param array $params
+     *  - carrera: ID de la carrera a la que aplica el proceso de preinscripción.
+     *  - periodo: ID del periodo al a que aplica el proceso de preinscripción.
+     *  - vigente: Fecha del periodo de preinscripción o @now para el tiempo actual.
+     * @return void
+     */
     public function getAll(array $params = [])
     {
         $response = $this->_get('/pagos/procesos/preinscripcion', $params);

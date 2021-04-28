@@ -9,6 +9,12 @@ use ITColima\Siitec2\Api\Model\App\Email;
 
 class EmailResource extends AbstractResource
 {
+    /**
+     * Envía un correo electrónico utilizando la misma dirección de correo de SIITEC.
+     *
+     * @param Email $email
+     * @return void
+     */
     public function send(Email $email)
     {
         $this->requiresClientAccessToken(true);

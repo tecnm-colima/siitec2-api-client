@@ -7,6 +7,15 @@ use ITColima\Siitec2\Api\AbstractResource;
 
 class ReinscripcionResource extends AbstractResource
 {
+    /**
+     * Obtiene los procesos de pago de Inscripción
+     *
+     * @param array $params
+     *  - carrera: ID de la carrera a la que aplica el proceso de reinscripción.
+     *  - periodo: ID del periodo al a que aplica el proceso de reinscripción.
+     *  - vigente: Fecha del periodo de reinscripción o @now para el tiempo actual.
+     * @return void
+     */
     public function getAll(array $params = [])
     {
         $response = $this->_get('/pagos/procesos/reinscripcion', $params);

@@ -7,6 +7,14 @@ use ITColima\Siitec2\Api\AbstractResource;
 
 class EstudiantesResource extends AbstractResource
 {
+    /**
+     * Obtiene los estudiantes según los parametros proporcionados
+     *
+     * @param array $params
+     *  - num_control: Número de control de estudiante.
+     *  - usuario_id: ID de usuario de estudiante.
+     * @return void
+     */
     public function getAll(array $params = [])
     {
         $this->requiresClientAccessToken(true);

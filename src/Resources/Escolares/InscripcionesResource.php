@@ -7,6 +7,12 @@ use ITColima\Siitec2\Api\Model\Escolares\Inscripcion;
 
 class InscripcionesResource extends AbstractResource
 {
+    /**
+     * Registra la inscripción de un estudiante a un periodo
+     *
+     * @param Inscripcion $reins Objeto que contiene los datos para inscripción.
+     * @return void
+     */
     public function put(Inscripcion $reins)
     {
         $this->requiresClientAccessToken();
