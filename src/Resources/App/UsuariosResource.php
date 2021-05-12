@@ -9,6 +9,9 @@ class UsuariosResource extends AbstractResource
 {
     public function getById($id, array $params = [])
     {
+        if (is_array($id)) {
+            $id = join('+', $id);
+        }
         $this->requiresClientAccessToken(true);
         $response = $this->_get("/app/usuarios/{$id}", $params);
         return MessageHelper::getContent($response);
