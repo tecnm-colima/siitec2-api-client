@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Resources\Escolares;
 
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 
 class EstudiantesResource extends AbstractResource
@@ -19,7 +19,7 @@ class EstudiantesResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $response = $this->_get('/escolares/estudiantes', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getByNumControl(string $num_control, array $params = [])
@@ -27,7 +27,7 @@ class EstudiantesResource extends AbstractResource
         $this->requiresClientAccessToken();
         $params['num_control'] = $num_control;
         $response = $this->_get('/escolares/estudiantes', $params);
-        $output = MessageHelper::getContent($response);
+        $output = HttpHelper::getContent($response);
         if (empty($output)) {
             return null;
         }
@@ -39,7 +39,7 @@ class EstudiantesResource extends AbstractResource
         $this->requiresClientAccessToken();
         $id = is_array($id) ? implode('+', $id) : $id;
         $response = $this->_get("/escolares/estudiantes/{$id}", $params);
-        $output = MessageHelper::getContent($response);
+        $output = HttpHelper::getContent($response);
         if (empty($output)) {
             return null;
         }
@@ -51,7 +51,7 @@ class EstudiantesResource extends AbstractResource
         $this->requiresClientAccessToken();
         $params['usuario_id'] = is_array($id) ? implode('+', $id) : $id;
         $response = $this->_get("/escolares/estudiantes", $params);
-        $output = MessageHelper::getContent($response);
+        $output = HttpHelper::getContent($response);
         if (empty($output)) {
             return null;
         }

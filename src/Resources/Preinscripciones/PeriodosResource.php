@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Resources\Preinscripciones;
 
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 
 class PeriodosResource extends AbstractResource
@@ -16,7 +16,7 @@ class PeriodosResource extends AbstractResource
     public function getAll(array $params = [])
     {
         $response = $this->_get('/preinscripciones/periodos', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     /**
@@ -34,6 +34,6 @@ class PeriodosResource extends AbstractResource
             $periodo_id = join('+', $periodo_id);
         }
         $response = $this->_get("/preinscripciones/periodos/{$periodo_id}", $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 }

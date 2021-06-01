@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Resources\Escolares;
 
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 
 class PeriodosResource extends AbstractResource
@@ -18,7 +18,7 @@ class PeriodosResource extends AbstractResource
     {
         $this->requiresAccessToken(false);
         $response = $this->_get('/escolares/periodos', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getById($periodo_id, array $params = [])
@@ -28,13 +28,13 @@ class PeriodosResource extends AbstractResource
         }
         $this->requiresAccessToken(false);
         $response = $this->_get("/escolares/periodos/{$periodo_id}", $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getCurrent(array $params = [])
     {
         $this->requiresAccessToken(false);
         $response = $this->_get('/escolares/periodos/@current', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 }

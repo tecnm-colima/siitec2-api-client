@@ -2,6 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Resources\Escolares;
 
+use Francerz\Http\Utils\HttpHelper;
 use Francerz\Http\Utils\MessageHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 
@@ -17,7 +18,7 @@ class CarrerasResource extends AbstractResource
     {
         $this->requiresAccessToken(false);
         $response = $this->_get('/escolares/carreras', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getById($carrera_id, array $params = [])
@@ -27,6 +28,6 @@ class CarrerasResource extends AbstractResource
         }
         $this->requiresAccessToken(false);
         $response = $this->_get("/escolares/carreras/{$carrera_id}", $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 }

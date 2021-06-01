@@ -6,6 +6,7 @@ use Francerz\Http\Client as HttpClient;
 use Francerz\Http\HttpFactory;
 use Francerz\Http\Server;
 use Francerz\Http\Utils\HttpFactoryManager;
+use Francerz\Http\Utils\HttpHelper;
 use Francerz\Http\Utils\MessageHelper;
 use Francerz\Http\Utils\ServerInterface;
 use Francerz\Http\Utils\UriHelper;
@@ -22,8 +23,9 @@ class Cliente extends AbstractClient
 {
     private $perfil = null;
 
+    private $httpHelper;
+
     private $loginHandlerUri = null;
-    private $logoutUri = null;
 
     public function __construct(
         ?string $configFile = null,
@@ -32,6 +34,7 @@ class Cliente extends AbstractClient
     ) {
         $httpFactory = isset($httpFactory) ? $httpFactory : new HttpFactoryManager(new HttpFactory());
         $httpClient = isset($httpClient) ? $httpClient : new HttpClient();
+        $this->httpHelper = new HttpHelper($httpFactory);
         parent::__construct($httpFactory, $httpClient);
 
         $this->getOAuth2Client()->setAuthorizationEndpoint(Constants::AUTHORIZE_ENDPOINT);
@@ -122,8 +125,7 @@ class Cliente extends AbstractClient
     public function redirectAuthRequest($loginUri)
     {
         $uri = $this->redirectAuthUri($loginUri);
-        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
-        return MessageHelper::makeRedirect($uri);
+        return $this->httpHelper->makeRedirect($uri);
     }
 
     /**
@@ -157,8 +159,7 @@ class Cliente extends AbstractClient
     public function getLoginRequest(array $scopes = [], string $state = '') : ResponseInterface
     {
         $authCodeUri = $this->getAuthCodeUri($scopes, $state);
-        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
-        return MessageHelper::makeRedirect($authCodeUri);
+        return $this->httpHelper->makeRedirect($authCodeUri);
     }
 
     public function performLogin(array $scopes = [], string $state = '', ?ServerInterface $server = null)
@@ -203,8 +204,7 @@ class Cliente extends AbstractClient
 
         $uri = UriHelper::withQueryParam($uri, 'logout', $logoutUri);
         
-        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
-        return MessageHelper::makeRedirect($uri);
+        return $this->httpHelper->makeRedirect($uri);
     }
 
     public function handleLogin(?ServerRequestInterface $request = null)
@@ -283,13 +283,12 @@ class Cliente extends AbstractClient
     {
         $this->revoke();
 
-        MessageHelper::setHttpFactoryManager($this->getHttpFactoryManager());
         $currentUri = UriHelper::getCurrent($this->getHttpFactoryManager()->getUriFactory());
         $continue = UriHelper::getQueryParam($currentUri, 'continue');
 
         if (!empty($continue)) {
-            return MessageHelper::makeRedirect($continue);
+            return $this->httpHelper->makeRedirect($continue);
         }
-        return MessageHelper::makeRedirect(static::getPlatformUrl());
+        return $this->httpHelper->makeRedirect(static::getPlatformUrl());
     }
 }

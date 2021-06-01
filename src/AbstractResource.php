@@ -6,7 +6,7 @@ use Francerz\Http\Utils\Constants\MediaTypes;
 use Francerz\Http\Utils\Constants\Methods;
 use Francerz\Http\Utils\Exceptions\ClientErrorException;
 use Francerz\Http\Utils\Exceptions\ServerErrorException;
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use Francerz\Http\Utils\UriHelper;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,12 +16,14 @@ abstract class AbstractResource
     private $cliente;
     private $requiresAccessToken;
     private $requiresClientAccessToken;
+    private $httpHelper;
 
     public function __construct(Cliente $cliente)
     {
         $this->cliente = $cliente;
         $this->requiresAccessToken = false;
         $this->requiresClientAccessToken = false;
+        $this->httpHelper = new HttpHelper($cliente->getHttpFactoryManager());
     }
 
     protected function requiresAccessToken(bool $requires = true)
@@ -59,8 +61,7 @@ abstract class AbstractResource
         }
 
         if (isset($content)) {
-            MessageHelper::setHttpFactoryManager($this->cliente->getHttpFactoryManager());
-            $request = MessageHelper::withContent($request, $mediaType, $content);
+            $request = $this->httpHelper->withContent($request, $mediaType, $content);
         }
 
         return $request;
@@ -69,9 +70,9 @@ abstract class AbstractResource
     protected function sendRequest(RequestInterface $request) : ResponseInterface
     {
         $response = $this->cliente->getHttpClient()->sendRequest($request);
-        if (MessageHelper::isClientError($response)) {
+        if (HttpHelper::isClientError($response)) {
             throw new ClientErrorException($request, $response, "HTTP Client error: {$response->getStatusCode()}".print_r($response->getBody(), true));
-        } elseif (MessageHelper::isServerError($response)) {
+        } elseif (HttpHelper::isServerError($response)) {
             throw new ServerErrorException($request, $response, "HTTP Server error: {$response->getStatusCode()}".print_r($response->getBody(), true));
         }
         return $response;

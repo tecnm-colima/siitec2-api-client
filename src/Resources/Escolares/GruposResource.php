@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Resources\Escolares;
 
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 
 class GruposResource extends AbstractResource
@@ -25,7 +25,7 @@ class GruposResource extends AbstractResource
     {
         $this->requiresAccessToken(false);
         $response = $this->_get('/escolares/grupos', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getById($grupo_id, array $params = [])
@@ -35,20 +35,20 @@ class GruposResource extends AbstractResource
         }
         $this->requiresAccessToken(false);
         $response = $this->_get("/escolares/grupos/{$grupo_id}", $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getAsDocente(array $params = [])
     {
         $this->requiresAccessToken(true);
         $response = $this->_get('/escolares/grupos/@docente', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function getAsEstudiante(array $params = [])
     {
         $this->requiresAccessToken(true);
         $response = $this->_get('/escolares/grupos/@estudiante', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     } 
 }

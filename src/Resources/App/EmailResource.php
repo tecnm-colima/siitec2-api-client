@@ -3,7 +3,7 @@
 namespace ITColima\Siitec2\Api\Resources\App;
 
 use Francerz\Http\Utils\Constants\MediaTypes;
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
 use ITColima\Siitec2\Api\Model\App\Email;
 
@@ -19,6 +19,6 @@ class EmailResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $response = $this->_post('/app/email', $email, MediaTypes::APPLICATION_JSON);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 }

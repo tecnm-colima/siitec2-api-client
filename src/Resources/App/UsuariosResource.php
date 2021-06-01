@@ -2,8 +2,8 @@
 
 namespace ITColima\Siitec2\Api\Resources\App;
 
+use Francerz\Http\Utils\HttpHelper;
 use ITColima\Siitec2\Api\AbstractResource;
-use Francerz\Http\Utils\MessageHelper;
 
 class UsuariosResource extends AbstractResource
 {
@@ -14,7 +14,7 @@ class UsuariosResource extends AbstractResource
         }
         $this->requiresClientAccessToken(true);
         $response = $this->_get("/app/usuarios/{$id}", $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     /**
@@ -34,7 +34,7 @@ class UsuariosResource extends AbstractResource
     {
         $this->requiresClientAccessToken(true);
         $response = $this->_get('/app/usuarios', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function findTerm($term, array $params = [])
@@ -42,7 +42,7 @@ class UsuariosResource extends AbstractResource
         $this->requiresClientAccessToken(true);
         $params['q'] = $term;
         $response = $this->_get('/app/usuarios', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function findMatricula($matricula, array $params = [])
@@ -50,7 +50,7 @@ class UsuariosResource extends AbstractResource
         $this->requiresClientAccessToken(true);
         $params['matricula'] = $matricula;
         $response = $this->_get('/app/usuarios', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 
     public function findCurp($curp, array $params = []) 
@@ -58,6 +58,6 @@ class UsuariosResource extends AbstractResource
         $this->requiresClientAccessToken(true);
         $params['curp'] = $curp;
         $response = $this->_get('/app/usuarios', $params);
-        return MessageHelper::getContent($response);
+        return HttpHelper::getContent($response);
     }
 }
