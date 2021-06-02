@@ -142,7 +142,6 @@ class Cliente extends AbstractClient
     }
 
     /**
-     * @deprecated 0.1.17
      * Retrieves OAuth 2.0 Authorization Code Uri adapted to given $scopes and $state
      *
      * @param array $scopes

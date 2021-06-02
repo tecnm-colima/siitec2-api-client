@@ -2,7 +2,7 @@
 
 namespace ITColima\Siitec2\Api\Model\App;
 
-use Francerz\Http\Utils\MessageHelper;
+use Francerz\Http\Utils\HttpHelper;
 use JsonSerializable;
 use Psr\Http\Message\MessageInterface;
 
@@ -18,7 +18,7 @@ class Email implements JsonSerializable
 
     public static function fromHttpMessage(MessageInterface $message)
     {
-        $content = MessageHelper::getContent($message);
+        $content = HttpHelper::getContent($message);
         $email = new static();
         $email->to = is_object($content->to) || is_array($content->to) ? (array)$content->to : [];
         $email->cc = is_object($content->cc) || is_array($content->cc) ? (array)$content->cc : [];
