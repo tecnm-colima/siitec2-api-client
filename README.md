@@ -177,3 +177,14 @@ use ITColima\Siitec2\Api\Siitec2Api;
 
 ```
 
+DEPURACIÓN
+----------
+
+De manera predeterminada la API tiene asociadas direcciones de inicialización,
+mismas que pueden modificarse para depuración y ejecución con entonos locales.
+
+```env
+SIITEC2_API_AUTHORIZE_ENDPOINT = 'https://siitec.colima.tecnm.mx/index.php/oauth2/authorize'
+SIITEC2_API_TOKEN_ENDPOINT = 'https://siitec.colima.tecnm.mx/index.php/oauth2/token'
+SIITEC2_API_RESOURCE_ENPOINT = 'https.//siitec.colima.tecnm.mx/api/index.php'
+```
