@@ -39,7 +39,7 @@ class KardexResource extends AbstractResource
             }
         }
 
-        $response = $this->_post("/escolares/kardex/",
+        $response = $this->_post("/escolares/kardex",
             array(
                 "periodo_id" => $periodo_id,
                 "overwrite" => $overwrite,
