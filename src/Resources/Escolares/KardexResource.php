@@ -4,9 +4,12 @@ namespace ITColima\Siitec2\Api\Resources\Escolares;
 
 use Francerz\Http\Utils\Constants\MediaTypes;
 use Francerz\Http\Utils\HttpHelper;
+use Francerz\PowerData\Index;
 use ITColima\Siitec2\Api\AbstractResource;
 use ITColima\Siitec2\Api\Model\Escolares\Kardex;
 use LogicException;
+use RuntimeException;
+use SebastianBergmann\Environment\Runtime;
 
 class KardexResource extends AbstractResource
 {
@@ -24,6 +27,8 @@ class KardexResource extends AbstractResource
         if (!is_array($kardex)) {
             $kardex = [$kardex];
         }
+        $kardexIndex = new Index($kardex,['alumno_id','materia_id','periodo_id']);
+        $duplicate = [];
         foreach ($kardex as $i => $k) {
             if (!$k instanceof Kardex) {
                 throw new LogicException("Invalid kardex value, MUST be Kardex or Kardex[].");
@@ -37,6 +42,25 @@ class KardexResource extends AbstractResource
             if (!is_numeric($k->oportunidad) || !in_array($k->oportunidad, [1,2,'1','2'])) {
                 throw new LogicException(sprintf('Oportunidad inválida %d en posición %d.', $k->oportunidad, $i));
             }
+            $matches = $kardexIndex[[
+                'alumno_id' => $k->alumno_id,
+                'materia_id' => $k->materia_id,
+                'periodo_id' => $k->periodo_id
+            ]];
+            if (count($matches) > 1) {
+                $duplicate[] = $k;
+            }
+        }
+        if (count($duplicate) > 0) {
+            throw new RuntimeException(sprintf("Se encontraron duplicados: %s\n", implode("\n",array_map(function($v, $k) {
+                return sprintf(
+                    "[%d]:{ alumno_id:%d, materia_id:%d, periodo_id:%d }",
+                    $k,
+                    $v->alumno_id,
+                    $v->materia_id,
+                    $v->periodo_id
+                );
+            }, $duplicate))));
         }
 
         $response = $this->_post("/escolares/kardex",
