@@ -27,7 +27,6 @@ class KardexResource extends AbstractResource
         if (!is_array($kardex)) {
             $kardex = [$kardex];
         }
-        $kardexIndex = new Index($kardex,['alumno_id','materia_id','periodo_id']);
         $duplicate = [];
         foreach ($kardex as $i => $k) {
             if (!$k instanceof Kardex) {
@@ -42,25 +41,16 @@ class KardexResource extends AbstractResource
             if (!is_numeric($k->oportunidad) || !in_array($k->oportunidad, [1,2,'1','2'])) {
                 throw new LogicException(sprintf('Oportunidad inválida %d en posición %d.', $k->oportunidad, $i));
             }
-            $matches = $kardexIndex[[
-                'alumno_id' => $k->alumno_id,
-                'materia_id' => $k->materia_id,
-                'periodo_id' => $k->periodo_id
-            ]];
-            if (count($matches) > 1) {
-                $duplicate[] = $k;
-            }
+            $key = "{$k->alumno_id}-{$k->materia_id}-{$k->periodo_id}";
+            $duplicate[$key] = ($duplicate[$key] ?? 0) + 1;
         }
+
+        $duplicate = array_keys(array_filter($duplicate, function($v) { return $v > 1; }));
+
         if (count($duplicate) > 0) {
-            throw new RuntimeException(sprintf("Se encontraron duplicados: %s\n", implode("\n",array_map(function($v, $k) {
-                return sprintf(
-                    "[%d]:{ alumno_id:%d, materia_id:%d, periodo_id:%d }",
-                    $k,
-                    $v->alumno_id,
-                    $v->materia_id,
-                    $v->periodo_id
-                );
-            }, $duplicate))));
+            throw new RuntimeException(
+                sprintf("Se encontraron duplicados:\n%s\n", implode("\n", $duplicate))
+            );
         }
 
         $response = $this->_post("/escolares/kardex",
